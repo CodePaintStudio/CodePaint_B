@@ -24,6 +24,10 @@ const theme = {
             headerColor: "#6baca3",
             headerSplitColor: "rgb(107, 172, 164)",
             headerBg: "rgba(107, 172, 164, 0.2)",
+        },
+        Select: {
+            optionSelectedFontWeight: 900,
+            optionFontSize: 14,
         }
     }
 };
