@@ -1,8 +1,13 @@
-# React + Vite
+# 项目启动说明文档
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-Currently, two official plugins are available:
+## 环境准备
+**在开始前请确保你的`Vite`已经正确安装，否则请运行以下指令：**
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+**安装`Vite`:** `npm install Vite -g`
+
+## 开始项目
+
+**安装依赖：** `npm install --force`
+
+**启动项目：** `npm run dev`
