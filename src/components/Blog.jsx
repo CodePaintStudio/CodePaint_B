@@ -4,16 +4,20 @@ import {clearObj, sleep} from "../utils/tools.js";
 import moment from "moment";
 
 import SearchForm from './BlogSearch.jsx';
+import BlogDetail from "./BlogDetail.jsx";
 import {message, Popconfirm, Space, Table} from "antd";
 
 import {
     getArticleListServer,
-    deleteArticleServer
+    deleteArticleServer,
+    getBlogListByTypeServer
 } from "../api/articelsCate.js"
 
 export default function Blog() {
     const [blogList, setBlogList] = useState([]);
+    const [selectedBlogId, setSelectedBlogId] = useState(null); // 添加状态
     const [loading, setLoading] = useState(false);
+    const [open, setOpen] = useState(false);
 
     const columns = [
         {
@@ -27,15 +31,15 @@ export default function Blog() {
             key: "articleAuthor"
         },
         {
+            title: "类型",
+            dataIndex: "articleType",
+            key: "articleType",
+        },
+        {
             title: "浏览量",
             dataIndex: "articleLookCount",
             sorter: (a, b) => a - b,
             key: "articleLookCount"
-        },
-        {
-            title: "类型",
-            dataIndex: "articleType",
-            key: "articleType",
         },
         {
             title: "发布时间",
@@ -61,6 +65,7 @@ export default function Blog() {
                         style={{color: "#85bbb5"}}
                         onClick={(e) => {
                             e.preventDefault();
+                            showDrawer(record.articleId)
                         }}
                     >
                         详情
@@ -90,6 +95,14 @@ export default function Blog() {
         }
     ]
 
+    const showDrawer = (id) => {
+        setOpen(true);
+        setSelectedBlogId(id)
+    };
+    const onClose = () => {
+        setOpen(false);
+    };
+
     async function getArticleList() {
         try {
             setLoading(true)
@@ -110,15 +123,6 @@ export default function Blog() {
 
     }
 
-    function handleSubmit(values) {
-        values = clearObj(values);
-        if (values.publishTime) values.publishTime = dayjs(values.publishTime).format("YYYY-MM-DD");
-        if (!Object.keys(values).length) return message.warning("请补全查询条件");
-        console.log(values)
-
-        /*TODO: 搜索提交*/
-    }
-
     async function deleteArticle(id) {
         try {
             setLoading(true)
@@ -131,6 +135,36 @@ export default function Blog() {
             sleep(1000).then(() => {
                 getArticleList();
             })
+        }
+    }
+
+    async function getBlogListByType(type) {
+        try {
+            setLoading(true)
+            const data = await getBlogListByTypeServer(type)
+            const articleListWithKeys = data.data.map((item, index) => {
+                return {
+                    ...item,
+                    key: index,
+                    articleCreatedTime: moment(item.articleCreatedTime).local().format("YYYY-MM-DD HH:mm:ss"),
+                };
+            });
+            setBlogList(articleListWithKeys);
+        } catch {
+            message.warning("查询失败");
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    function handleSubmit(values) {
+        values = clearObj(values);
+        if (values.publishTime) values.publishTime = dayjs(values.publishTime).format("YYYY-MM-DD");
+        if (!Object.keys(values).length) return message.warning("请补全查询条件");
+
+        /*TODO: 搜索提交*/
+        if (values.type) {
+            getBlogListByType(values.type)
         }
     }
 
@@ -161,6 +195,7 @@ export default function Blog() {
                     columns={columns}
                 />
             </div>
+            <BlogDetail onClose={onClose} open={open} selectedBlogId={selectedBlogId}/>
         </>
     );
 }

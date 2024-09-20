@@ -20,11 +20,11 @@ export default function ActivitiesSearch({onFinish}) {
                 >
                     <Form.Item
                         labelCol={{span: 4}}
-                        label="作品名称"
+                        label="活动名称"
                         name="title"
                     >
                         <Input
-                            placeholder={"请输入作品名称"}
+                            placeholder={"输入关键字以搜索"}
                         />
                     </Form.Item>
                 </Col>
