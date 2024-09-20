@@ -53,7 +53,7 @@ export default function BlogSearch({onFinish}) {
                         name="title"
                     >
                         <Input
-                            placeholder={"请输入作品名称"}
+                            placeholder={"输入关键字以搜索"}
                         />
                     </Form.Item>
                 </Col>
@@ -67,7 +67,7 @@ export default function BlogSearch({onFinish}) {
                         name="author"
                     >
                         <Input
-                            placeholder={"请输入作者"}
+                            placeholder={"输入作者以搜索"}
                         />
                     </Form.Item>
                 </Col>

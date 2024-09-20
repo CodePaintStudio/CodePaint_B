@@ -1,35 +1,29 @@
 import {Button, Col, Form, Input, Row, Select} from 'antd';
+import {getBlogTypeListServer} from "../api/articelsCate.js";
+import {useEffect, useState} from "react";
 
-const {Option} = Select;
 
 export default function BlogSearch({onFinish}) {
 
-    const typeListData = [
-        {
-            value: 'all',
-            label: '全部',
-        },
-        {
-            value: 'HTML',
-            label: "HTML"
-        },
-        {
-            value: 'CSS',
-            label: "CSS"
-        },
-        {
-            value: 'JavaScript',
-            label: "JavaScript"
-        }
-    ];
+    const [blogTypeList, setBlogTypeList] = useState([]);
 
-    let typeList
-    typeListData ?
-        typeList = typeListData.map(item => {
-            return <Option key={item.value} value={item.value}>{item.label}</Option>
-        })
-        :
-        typeList = []
+    async function getBlogTypeList() {
+        const data = await getBlogTypeListServer()
+        if (data.data) {
+            let typeList = data.data.map((item => {
+                return {
+                    value: item,
+                    label: item
+                }
+            }))
+            setBlogTypeList(typeList)
+        }
+
+    }
+
+    useEffect(() => {
+        getBlogTypeList()
+    }, [])
 
     return (
         <Form
@@ -49,11 +43,11 @@ export default function BlogSearch({onFinish}) {
                 >
                     <Form.Item
                         labelCol={{span: 4}}
-                        label="标题"
+                        label="博客名"
                         name="title"
                     >
                         <Input
-                            placeholder={"请输入标题"}
+                            placeholder={"输入关键字以搜索"}
                         />
                     </Form.Item>
                 </Col>
@@ -67,7 +61,7 @@ export default function BlogSearch({onFinish}) {
                         name="author"
                     >
                         <Input
-                            placeholder={"请输入作者"}
+                            placeholder={"输入作者以搜索"}
                         />
                     </Form.Item>
                 </Col>
@@ -81,10 +75,10 @@ export default function BlogSearch({onFinish}) {
                         name="type"
                     >
                         <Select
+                            defaultValue={"全部"}
                             placeholder={"请选择类型"}
-                        >
-                            {typeList}
-                        </Select>
+                            options={blogTypeList}
+                        />
                     </Form.Item>
                 </Col>
                 <Col
