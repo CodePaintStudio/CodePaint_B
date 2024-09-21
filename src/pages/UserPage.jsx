@@ -1,12 +1,12 @@
-import React, {useState} from 'react';
-import {Avatar, Input, Modal, Button, Card, Form, message, Popconfirm} from 'antd';
-import {EditOutlined} from '@ant-design/icons';
+import {useState} from 'react';
+import {Avatar, Input, Modal, Button, Card, Form, message, Popconfirm, Upload} from 'antd';
+import {EditOutlined, UploadOutlined} from '@ant-design/icons';
 import {useSelector, useDispatch} from "react-redux";
 import {updateStoreUserInfo, clearUserInfo} from "../store/userSlice.js";
 import PersonalInfoItem from "../components/UserInfoItem.jsx";
-import UploadImg from "../components/UploadImg.jsx";
 import {maskMiddle, sleep} from "../utils/tools";
 import {changePasswordServer} from '../api/user.js'
+import {baseURL} from "../utils/baseURL.js";
 
 const UserPage = () => {
     const [open, setOpen] = useState(false);
@@ -125,65 +125,120 @@ const UserPage = () => {
         </Form>
     </>
 
+    const uploadProps = {
+        accept: "image",
+        showUploadList: false,
+        maxCount: 1,
+        name: 'file',
+        action: baseURL + "/upload/avatar",
+        headers: {
+            authorization: 'authorization-text'
+        },
+
+        beforeUpload(file) {
+            console.log(file.size)
+            const isImage = file.type.startsWith('image/');
+            const imgSize = isImage ? file.size : file.size;
+            if (!isImage) {
+                return message.error('只能上传图片文件!');
+            }
+            if (imgSize > 2 * 1024 * 1024) {
+                return message.warning("请选择大小为2MB以下的图片上传");
+            }
+            const formData = new FormData();
+            formData.append('file', file);
+
+            fetch(baseURL + "/upload/avatar", {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    authorization: 'authorization-text',
+                },
+                mode: 'cors',
+            })
+                .then(response => response.json())
+                .then(data => {
+                    message.success('头像上传成功');
+                    console.log(data.data.data)
+                    dispatch(updateStoreUserInfo({url: data.data.data}))
+                })
+                .catch(() => {
+                    message.error('头像上传失败');
+                });
+            return false;
+        }
+    };
+
     return (
         <>
             <Card title="个人中心" style={{minHeight: '50vh'}}>
-                <div style={{display: "flex", alignItems: "center"}}>
-                    <Avatar
-                        alt="暂无头像信息"
-                        src="https://api.dicebear.com/7.x/miniavs/svg?seed=1"
-                        size={128}
-                        icon={<EditOutlined/>}
-                        style={{
-                            marginRight: "5vh"
-                        }}
-                    />
-                    <UploadImg/>
-                </div>
-                <div style={{marginTop: '5vh'}}>
-                    <PersonalInfoItem
-                        info={{
-                            itemName: "登录账号",
-                            itemValue: userInfo.username
-                        }}
-                    />
-                    <PersonalInfoItem info={{
-                        itemName: "密码",
-                        itemValue: maskMiddle(userInfo.password)
-                    }}/>
-                    <a href="#"
-                       onClick={(e) => {
-                           e.preventDefault();
-                           setOpen(true)
-                       }}
-                       style={{color: "rgba(107, 172, 163, 0.8)"}}
-                    >修改密码</a>
-
-                    <Popconfirm
-                        title="警告"
-                        description="确认退出登录吗？"
-                        onConfirm={() => {
-                            message.success('退出登陆成功');
-                            dispatch(clearUserInfo());
-                            location.reload();
-                        }}
-                        onCancel={() => {
-                            message.info('已取消退出登录');
-                        }}
-                        okText="是"
-                        cancelText="否"
-                    >
-                        <a
-                            href="#"
-                            onClick={(e) => {
-                                e.preventDefault();
-                            }}
+                <div style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    alignItems: "center"
+                }}>
+                    <div style={{display: "flex", alignItems: "center", flexDirection: "column"}}>
+                        <Avatar
+                            alt="暂无头像信息"
+                            src={baseURL + '/' + userInfo.url}
+                            size={256}
+                            icon={<EditOutlined/>}
                             style={{
-                                marginLeft: "3vh",
-                                color: "rgba(107, 172, 163, 0.8)"
+                                marginBottom: "2vh"
                             }}
-                        >退出登录</a>
-                    </Popconfirm>
+                        />
+                        <Upload
+                            {...uploadProps}
+                        >
+                            <Button icon={<UploadOutlined/>}>修改头像</Button>
+                        </Upload>
+                    </div>
+                    <div style={{marginTop: '3vh'}}>
+                        <PersonalInfoItem
+                            info={{
+                                itemName: "登录账号",
+                                itemValue: userInfo.username
+                            }}
+                        />
+                        <PersonalInfoItem info={{
+                            itemName: "密码",
+                            itemValue: maskMiddle(userInfo.password)
+                        }}/>
+                        <a href="#"
+                           onClick={(e) => {
+                               e.preventDefault();
+                               setOpen(true)
+                           }}
+                           style={{color: "rgba(107, 172, 163, 0.8)"}}
+                        >修改密码</a>
+
+                        <Popconfirm
+                            title="警告"
+                            description="确认退出登录吗？"
+                            onConfirm={() => {
+                                message.success('退出登陆成功');
+                                dispatch(clearUserInfo());
+                                location.reload();
+                            }}
+                            onCancel={() => {
+                                message.info('已取消退出登录');
+                            }}
+                            okText="是"
+                            cancelText="否"
+                        >
+                            <a
+                                href="#"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                }}
+                                style={{
+                                    marginLeft: "3vh",
+                                    color: "rgba(107, 172, 163, 0.8)"
+                                }}
+                            >退出登录</a>
+                        </Popconfirm>
+                    </div>
                 </div>
 
             </Card>
