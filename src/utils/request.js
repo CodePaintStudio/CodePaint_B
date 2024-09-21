@@ -1,7 +1,6 @@
 import axios from 'axios';
+import {baseURL} from "./baseURL.js";
 import {message} from 'antd';
-
-const baseURL = 'http://127.0.0.1:3000'
 
 const request = axios.create({
     baseURL: baseURL,

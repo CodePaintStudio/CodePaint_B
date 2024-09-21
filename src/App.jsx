@@ -3,7 +3,8 @@ import LoginPage from "./pages/LoginPage.jsx";
 import {useEffect} from "react";
 import {useSelector, useDispatch} from 'react-redux';
 import {initUserInfo, changeLoginStatus} from "./store/userSlice.js";
-import {loginServer} from "./api/user.js";
+import {getInfoByNameServer, loginServer} from "./api/user.js";
+import {message} from "antd";
 
 export default function App() {
 
@@ -12,13 +13,23 @@ export default function App() {
 
     useEffect(() => {
         const localInfo = JSON.parse(localStorage.getItem('userInfo'));
+
         async function checkLoginStatusFn() {
-            const res = await loginServer({
-                username: localInfo.username,
-                password: localInfo.password,
-            })
-            dispatch(changeLoginStatus(true));
-            dispatch(initUserInfo(res.data));
+            try {
+                const res = await loginServer({
+                    username: localInfo.username,
+                    password: localInfo.password,
+                });
+                try {
+                    const userinfo = await getInfoByNameServer(res.username);
+                    dispatch(changeLoginStatus(true));
+                    dispatch(initUserInfo(userinfo));
+                } catch {
+                    message.error("获取用户信息失败")
+                }
+            } catch {
+                message.error("用户登录失败")
+            }
         }
 
         if (localInfo) {

@@ -22,15 +22,15 @@ const LoginPage = () => {
             }
             const res = await loginServer(info)
             const name = res.data.username;
-            const userInfo = await getInfoByNameServer({name: name})
+            const userInfo = await getInfoByNameServer({name: name});
+            console.log("userInfo", userInfo);
             dispatch(changeLoginStatus(true));
             dispatch(initUserInfo(userInfo));
             localStorage.setItem('userInfo', JSON.stringify(userInfo));
             message.success('登录成功')
         } else {
-            message.warning("请输入用户名或密码")
+            message.warning("请输入用户名或密码");
         }
-
     };
 
     const handleForgotPassword = () => {
