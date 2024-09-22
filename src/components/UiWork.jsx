@@ -1,18 +1,13 @@
 import dayjs from "dayjs";
 import {useState, useEffect} from "react";
-import {clearObj, sleep} from "../utils/tools.js";
-import moment from "moment";
+import {clearObj, sleep, toLocalDate} from "../utils/tools.js";
 
 import UiSearch from './UiSearch.jsx';
 import {message, Popconfirm, Space, Table} from "antd";
 
 import {
-    getArticleListServer,
-    deleteArticleServer
-} from "../api/articelsCate.js"
-
-import {
-    getWorkListServer
+    getWorkListServer,
+    deleteWorkServer
 } from "../api/uiWork.js"
 
 export default function UiWork() {
@@ -43,8 +38,8 @@ export default function UiWork() {
         },
         {
             title: "发布时间",
-            dataIndex: "workCreatedTime",
-            key: "workCreatedTime",
+            dataIndex: "workCreateTime",
+            key: "workCreateTime",
             sorter: (a, b) => a - b
         },
         {
@@ -73,7 +68,7 @@ export default function UiWork() {
                         title="警告"
                         description="是否要删除"
                         onConfirm={() => {
-                            deleteArticle(record.workId)
+                            deleteWork(record.workId)
                         }}
                         onCancel={() => {
                             message.info('取消删除');
@@ -102,7 +97,7 @@ export default function UiWork() {
                 return {
                     ...item,
                     key: index,
-                    workCreatedTime: moment(item.workCreatedTime).local().format("YYYY-MM-DD HH:mm:ss"),
+                    workCreateTime: toLocalDate(item.workCreateTime),
                 };
             });
             setUiWorkList(workListWithKeys);
@@ -124,10 +119,10 @@ export default function UiWork() {
         /*TODO: 搜索提交*/
     }
 
-    async function deleteArticle(id) {
+    async function deleteWork(id) {
         try {
             setLoading(true)
-            const data = await deleteArticleServer(id);
+            const data = await deleteWorkServer(id);
             message.info(data.message);
         } catch (err) {
             message.warning("删除失败");

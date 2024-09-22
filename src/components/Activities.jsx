@@ -1,13 +1,8 @@
-import dayjs from "dayjs";
 import {useState, useEffect} from "react";
-import {clearObj, sleep} from "../utils/tools.js";
+import {sleep} from "../utils/tools.js";
 
-import ActivitiesSearch from './ActivitiesSearch.jsx';
 import {message, Popconfirm, Space, Table} from "antd";
 
-import {
-    deleteArticleServer
-} from "../api/articelsCate.js"
 import {
     getActivitiesServer,
     deleteActivitiesServer
@@ -100,16 +95,6 @@ export default function Activities() {
         } finally {
             setLoading(false);
         }
-
-    }
-
-    function handleSubmit(values) {
-        values = clearObj(values);
-        if (values.publishTime) values.publishTime = dayjs(values.publishTime).format("YYYY-MM-DD");
-        if (!Object.keys(values).length) return message.warning("请补全查询条件");
-        console.log(values);
-
-        /*TODO: 搜索提交*/
     }
 
     async function deleteActivity(id) {
@@ -133,12 +118,6 @@ export default function Activities() {
 
     return (
         <>
-            <div>
-                <ActivitiesSearch
-                    onFinish={handleSubmit}
-                />
-
-            </div>
             <div
                 style={{
                     padding: 24
