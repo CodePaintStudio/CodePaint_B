@@ -11,6 +11,10 @@ import {
     deleteArticleServer
 } from "../api/articelsCate.js"
 
+import {
+    getWorkListServer
+} from "../api/uiWork.js"
+
 export default function UiWork() {
     const [uiWorkList, setUiWorkList] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -18,35 +22,35 @@ export default function UiWork() {
     const columns = [
         {
             title: "名称",
-            dataIndex: "articleTitle",
-            key: "articleTitle"
+            dataIndex: "workTitle",
+            key: "workTitle"
         },
         {
             title: "作者",
-            dataIndex: "articleAuthor",
-            key: "articleAuthor"
+            dataIndex: "workAuthor",
+            key: "workAuthor"
         },
         {
             title: "浏览量",
-            dataIndex: "articleLookCount",
+            dataIndex: "workLookCount",
             sorter: (a, b) => a- b,
-            key: "articleLookCount"
+            key: "workLookCount"
         },
         {
             title: "类型",
-            dataIndex: "articleType",
-            key: "articleType",
+            dataIndex: "workType",
+            key: "workType",
         },
         {
             title: "发布时间",
-            dataIndex: "articleCreatedTime",
-            key: "articleCreatedTime",
+            dataIndex: "workCreatedTime",
+            key: "workCreatedTime",
             sorter: (a, b) => a - b
         },
         {
             title: "ID",
-            dataIndex: "articleId",
-            key: "articleId",
+            dataIndex: "workId",
+            key: "workId",
             hidden: true
         },
         {
@@ -69,7 +73,7 @@ export default function UiWork() {
                         title="警告"
                         description="是否要删除"
                         onConfirm={() => {
-                            deleteArticle(record.articleId)
+                            deleteArticle(record.workId)
                         }}
                         onCancel={() => {
                             message.info('取消删除');
@@ -90,20 +94,21 @@ export default function UiWork() {
         }
     ]
 
-    async function getArticleList() {
+    async function getWorkList() {
         try {
             setLoading(true)
-            const data = await getArticleListServer();
-            const articleListWithKeys = data.data.map((item, index) => {
+            const data = await getWorkListServer();
+            const workListWithKeys = data.data.map((item, index) => {
                 return {
                     ...item,
                     key: index,
-                    articleCreatedTime: moment(item.articleCreatedTime).local().format("YYYY-MM-DD HH:mm:ss"),
+                    workCreatedTime: moment(item.workCreatedTime).local().format("YYYY-MM-DD HH:mm:ss"),
                 };
             });
-            setUiWorkList(articleListWithKeys);
+            setUiWorkList(workListWithKeys);
+            message.success("获取作品列表成功")
         } catch {
-            message.error("获取列表失败");
+            message.error("获取作品列表失败");
         } finally {
             setLoading(false)
         }
@@ -129,13 +134,13 @@ export default function UiWork() {
         } finally {
             setLoading(false);
             sleep(1000).then(()=>{
-                getArticleList();
+                getWorkList();
             })
         }
     }
 
     useEffect(() => {
-        getArticleList();
+        getWorkList();
     }, []);
 
     return (

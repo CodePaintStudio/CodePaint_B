@@ -114,11 +114,12 @@ export default function Blog() {
                     articleCreatedTime: moment(item.articleCreatedTime).local().format("YYYY-MM-DD HH:mm:ss"),
                 };
             });
+            message.success("获取博客列表成功");
             setBlogList(articleListWithKeys);
         } catch {
-            message.error("获取列表失败");
+            message.error("获取博客列表失败");
         } finally {
-            setLoading(false)
+            setLoading(false);
         }
 
     }
