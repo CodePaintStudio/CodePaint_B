@@ -1,15 +1,14 @@
 import dayjs from "dayjs";
 import {useState, useEffect} from "react";
-import {clearObj, sleep} from "../utils/tools.js";
-import moment from "moment";
+import {clearObj, sleep, toLocalDate} from "../utils/tools.js";
 
 import UiSearch from './UiSearch.jsx';
 import {message, Popconfirm, Space, Table} from "antd";
 
 import {
-    getArticleListServer,
-    deleteArticleServer
-} from "../api/articelsCate.js"
+    getWorkListServer,
+    deleteWorkServer
+} from "../api/uiWork.js"
 
 export default function UiWork() {
     const [uiWorkList, setUiWorkList] = useState([]);
@@ -18,35 +17,35 @@ export default function UiWork() {
     const columns = [
         {
             title: "名称",
-            dataIndex: "articleTitle",
-            key: "articleTitle"
+            dataIndex: "workTitle",
+            key: "workTitle"
         },
         {
             title: "作者",
-            dataIndex: "articleAuthor",
-            key: "articleAuthor"
+            dataIndex: "workAuthor",
+            key: "workAuthor"
         },
         {
             title: "浏览量",
-            dataIndex: "articleLookCount",
+            dataIndex: "workLookCount",
             sorter: (a, b) => a- b,
-            key: "articleLookCount"
+            key: "workLookCount"
         },
         {
             title: "类型",
-            dataIndex: "articleType",
-            key: "articleType",
+            dataIndex: "workType",
+            key: "workType",
         },
         {
             title: "发布时间",
-            dataIndex: "articleCreatedTime",
-            key: "articleCreatedTime",
+            dataIndex: "workCreateTime",
+            key: "workCreateTime",
             sorter: (a, b) => a - b
         },
         {
             title: "ID",
-            dataIndex: "articleId",
-            key: "articleId",
+            dataIndex: "workId",
+            key: "workId",
             hidden: true
         },
         {
@@ -69,7 +68,7 @@ export default function UiWork() {
                         title="警告"
                         description="是否要删除"
                         onConfirm={() => {
-                            deleteArticle(record.articleId)
+                            deleteWork(record.workId)
                         }}
                         onCancel={() => {
                             message.info('取消删除');
@@ -90,20 +89,21 @@ export default function UiWork() {
         }
     ]
 
-    async function getArticleList() {
+    async function getWorkList() {
         try {
             setLoading(true)
-            const data = await getArticleListServer();
-            const articleListWithKeys = data.data.map((item, index) => {
+            const data = await getWorkListServer();
+            const workListWithKeys = data.data.map((item, index) => {
                 return {
                     ...item,
                     key: index,
-                    articleCreatedTime: moment(item.articleCreatedTime).local().format("YYYY-MM-DD HH:mm:ss"),
+                    workCreateTime: toLocalDate(item.workCreateTime),
                 };
             });
-            setUiWorkList(articleListWithKeys);
+            setUiWorkList(workListWithKeys);
+            message.success("获取作品列表成功")
         } catch {
-            message.error("获取列表失败");
+            message.error("获取作品列表失败");
         } finally {
             setLoading(false)
         }
@@ -119,23 +119,23 @@ export default function UiWork() {
         /*TODO: 搜索提交*/
     }
 
-    async function deleteArticle(id) {
+    async function deleteWork(id) {
         try {
             setLoading(true)
-            const data = await deleteArticleServer(id);
+            const data = await deleteWorkServer(id);
             message.info(data.message);
         } catch (err) {
             message.warning("删除失败");
         } finally {
             setLoading(false);
             sleep(1000).then(()=>{
-                getArticleList();
+                getWorkList();
             })
         }
     }
 
     useEffect(() => {
-        getArticleList();
+        getWorkList();
     }, []);
 
     return (

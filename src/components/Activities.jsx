@@ -1,15 +1,12 @@
-import dayjs from "dayjs";
 import {useState, useEffect} from "react";
-import {clearObj, sleep} from "../utils/tools.js";
-import moment from "moment";
+import {sleep} from "../utils/tools.js";
 
-import ActivitiesSearch from './ActivitiesSearch.jsx';
 import {message, Popconfirm, Space, Table} from "antd";
 
 import {
-    getArticleListServer,
-    deleteArticleServer
-} from "../api/articelsCate.js"
+    getActivitiesServer,
+    deleteActivitiesServer
+} from "../api/activity.js"
 
 export default function Activities() {
     const [activitiesList, setActivitiesList] = useState([]);
@@ -17,30 +14,25 @@ export default function Activities() {
 
     const columns = [
         {
-            title: "名称",
-            dataIndex: "articleTitle",
-            key: "articleTitle"
+            title: "活动名",
+            dataIndex: "title",
+            key: "title"
         },
         {
-            title: "浏览量",
-            dataIndex: "articleLookCount",
-            sorter: (a, b) => a.articleLookCount < b.articleLookCount,
-            key: "articleLookCount"
+            title: "作者",
+            dataIndex: "creator",
+            key: "creator"
         },
         {
-            title: "发布时间",
-            dataIndex: "articleCreatedTime",
-            key: "articleCreatedTime",
-            sorter: (a, b) => {
-                const timeA = new Date(a.articleCreatedTime).getTime();
-                const timeB = new Date(b.articleCreatedTime).getTime();
-                return timeA - timeB;
-            },
+            title: "简介",
+            dataIndex: "intro",
+            key: "intro",
+            ellipsis: true
         },
         {
             title: "ID",
-            dataIndex: "articleId",
-            key: "articleId",
+            dataIndex: "id",
+            key: "id",
             hidden: true
         },
         {
@@ -63,7 +55,7 @@ export default function Activities() {
                         title="警告"
                         description="是否要删除"
                         onConfirm={() => {
-                            deleteArticle(record.articleId)
+                            deleteActivity(record.id)
                         }}
                         onCancel={() => {
                             message.info('取消删除');
@@ -77,69 +69,55 @@ export default function Activities() {
                             onClick={(e) => {
                                 e.preventDefault();
                             }}
-                        >删除</a>
+                        >
+                            删除
+                        </a>
                     </Popconfirm>
                 </Space>
             )
         }
     ]
 
-    async function getArticleList() {
+    async function getActivitiesList() {
         try {
             setLoading(true)
-            const data = await getArticleListServer();
-            const articleListWithKeys = data.data.map((item, index) => {
+            const data = await getActivitiesServer();
+            const activitiesListWithKeys = data.data.map((item, index) => {
                 return {
                     ...item,
-                    key: index,
-                    articleCreatedTime: moment(item.articleCreatedTime).local().format("YYYY-MM-DD HH:mm:ss"),
+                    key: index
                 };
             });
-            setActivitiesList(articleListWithKeys);
+            message.success("获取活动列表成功");
+            setActivitiesList(activitiesListWithKeys);
         } catch {
-            message.error("获取列表失败");
-        } finally {
-            setLoading(false)
-        }
-
-    }
-
-    function handleSubmit(values) {
-        values = clearObj(values);
-        if (values.publishTime) values.publishTime = dayjs(values.publishTime).format("YYYY-MM-DD");
-        if (!Object.keys(values).length) return message.warning("请补全查询条件");
-        console.log(values)
-
-        /*TODO: 搜索提交*/
-    }
-
-    async function deleteArticle(id) {
-        try {
-            setLoading(true)
-            const data = await deleteArticleServer(id);
-            message.info(data.message);
-        } catch (err) {
-            message.warning("删除失败");
+            message.error("获取活动列表失败");
         } finally {
             setLoading(false);
-            sleep(1000).then(()=>{
-                getArticleList();
+        }
+    }
+
+    async function deleteActivity(id) {
+        try {
+            setLoading(true)
+            await deleteActivitiesServer(id);
+            message.info("活动删除成功");
+        } catch (err) {
+            message.warning("活动删除失败");
+        } finally {
+            setLoading(false);
+            sleep(1000).then(() => {
+                getActivitiesList();
             })
         }
     }
 
     useEffect(() => {
-        getArticleList();
+        getActivitiesList();
     }, []);
 
     return (
         <>
-            <div>
-                <ActivitiesSearch
-                    onFinish={handleSubmit}
-                />
-
-            </div>
             <div
                 style={{
                     padding: 24

@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import {useState, useEffect} from "react";
-import {clearObj, sleep} from "../utils/tools.js";
+import {clearObj, sleep, toLocalDate} from "../utils/tools.js";
 import moment from "moment";
 
 import SearchForm from './BlogSearch.jsx';
@@ -111,14 +111,15 @@ export default function Blog() {
                 return {
                     ...item,
                     key: index,
-                    articleCreatedTime: moment(item.articleCreatedTime).local().format("YYYY-MM-DD HH:mm:ss"),
+                    articleCreatedTime: toLocalDate(item.articleCreatedTime),
                 };
             });
+            message.success("获取博客列表成功");
             setBlogList(articleListWithKeys);
         } catch {
-            message.error("获取列表失败");
+            message.error("获取博客列表失败");
         } finally {
-            setLoading(false)
+            setLoading(false);
         }
 
     }
