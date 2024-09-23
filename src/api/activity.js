@@ -16,3 +16,11 @@ export function getActivitiesServer(data) {
 export function deleteActivitiesServer (id) {
     return request.delete(`/activity?id=${id}`)
 }
+
+/** 根据ID获取文章详情
+ * @param id
+ * @returns {Promise<axios.AxiosResponse<any>>}
+ */
+export function getActivityByIdServer (id) {
+    return request.get(`/activity/detail?id=${id}`)
+}
