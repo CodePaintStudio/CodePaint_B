@@ -7,10 +7,13 @@ import {
     getActivitiesServer,
     deleteActivitiesServer
 } from "../api/activity.js"
+import Details from "./Details.jsx";
 
 export default function Activities() {
     const [activitiesList, setActivitiesList] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [open, setOpen] = useState(false);
+    const [selectedActivityId, setSelectedActivityId] = useState(null);
 
     const columns = [
         {
@@ -47,6 +50,7 @@ export default function Activities() {
                         style={{color: "#85bbb5"}}
                         onClick={(e) => {
                             e.preventDefault();
+                            showDrawer(record.id);
                         }}
                     >
                         详情
@@ -77,6 +81,14 @@ export default function Activities() {
             )
         }
     ]
+
+    const showDrawer = (id) => {
+        setSelectedActivityId(id);
+        setOpen(true);
+    };
+    const onClose = () => {
+        setOpen(false);
+    };
 
     async function getActivitiesList() {
         try {
@@ -133,6 +145,7 @@ export default function Activities() {
                     columns={columns}
                 />
             </div>
+            <Details id={selectedActivityId} type={"活动"} open={open} onClose={onClose}/>
         </>
     );
 }

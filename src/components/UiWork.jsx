@@ -3,6 +3,7 @@ import {useState, useEffect} from "react";
 import {clearObj, sleep, toLocalDate} from "../utils/tools.js";
 
 import UiSearch from './UiSearch.jsx';
+import Details from "./Details.jsx";
 import {message, Popconfirm, Space, Table} from "antd";
 
 import {
@@ -13,6 +14,8 @@ import {
 export default function UiWork() {
     const [uiWorkList, setUiWorkList] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [open, setOpen] = useState(false);
+    const [selectedWorkId, setSelectedWorkId] = useState(null); // 添加状态
 
     const columns = [
         {
@@ -60,6 +63,7 @@ export default function UiWork() {
                         style={{color: "#85bbb5"}}
                         onClick={(e) => {
                             e.preventDefault();
+                            showDrawer(record.workId)
                         }}
                     >
                         详情
@@ -89,6 +93,14 @@ export default function UiWork() {
         }
     ]
 
+    const showDrawer = (id) => {
+        setOpen(true);
+        setSelectedWorkId(id)
+    };
+    const onClose = () => {
+        setOpen(false);
+    };
+
     async function getWorkList() {
         try {
             setLoading(true)
@@ -110,22 +122,13 @@ export default function UiWork() {
 
     }
 
-    function handleSubmit(values) {
-        values = clearObj(values);
-        if (values.publishTime) values.publishTime = dayjs(values.publishTime).format("YYYY-MM-DD");
-        if (!Object.keys(values).length) return message.warning("请补全查询条件");
-        console.log(values)
-
-        /*TODO: 搜索提交*/
-    }
-
     async function deleteWork(id) {
         try {
             setLoading(true)
-            const data = await deleteWorkServer(id);
-            message.info(data.message);
+            await deleteWorkServer(id);
+            message.success("删除成功");
         } catch (err) {
-            message.warning("删除失败");
+            message.error("删除失败");
         } finally {
             setLoading(false);
             sleep(1000).then(()=>{
@@ -142,7 +145,8 @@ export default function UiWork() {
         <>
             <div>
                 <UiSearch
-                    onFinish={handleSubmit}
+                    setUiWorkList = {setUiWorkList}
+                    setLoading = {setLoading}
                 />
 
             </div>
@@ -161,6 +165,7 @@ export default function UiWork() {
                     columns={columns}
                 />
             </div>
+            <Details id={selectedWorkId} type={"作品"} open={open} onClose={onClose}/>
         </>
     );
 }
