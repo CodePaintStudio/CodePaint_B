@@ -1,35 +1,25 @@
-import {Button, Col, DatePicker, Form, Input, Row, Select} from 'antd';
+import {Button, Col, Form, Input, message, Row} from 'antd';
+import {clearObj} from "../utils/tools.js";
+import {
+    searchWorkServer
+} from "../api/uiWork.js"
 
-const {Option} = Select;
+export default function UiSearch({setUiWorkList, setLoading}) {
 
-export default function BlogSearch({onFinish}) {
-
-    const typeListData = [
-        {
-            value: 'all',
-            label: '全部',
-        },
-        {
-            value: 'HTML',
-            label: "HTML"
-        },
-        {
-            value: 'CSS',
-            label: "CSS"
-        },
-        {
-            value: 'JavaScript',
-            label: "JavaScript"
+    async function handleSubmit(values) {
+        values = clearObj(values);
+        if (!Object.keys(values).length) return message.warning("请补全查询条件");
+        try {
+            setLoading(true);
+            const data = await searchWorkServer(values);
+            setUiWorkList(data.data);
+            message.success("查询UI作品成功");
+        } catch {
+            message.warning("查询UI作品失败");
+        } finally {
+            setLoading(false);
         }
-    ];
-
-    let typeList
-    typeListData ?
-        typeList = typeListData.map(item => {
-            return <Option key={item.value} value={item.value}>{item.label}</Option>
-        })
-        :
-        typeList = []
+    }
 
     return (
         <Form
@@ -40,7 +30,7 @@ export default function BlogSearch({onFinish}) {
                 paddingBottom: 0
             }}
             labelAlign="right"
-            onFinish={onFinish}
+            onFinish={handleSubmit}
             autoComplete="off"
         >
             <Row>
@@ -50,7 +40,7 @@ export default function BlogSearch({onFinish}) {
                     <Form.Item
                         labelCol={{span: 4}}
                         label="作品名称"
-                        name="title"
+                        name="workTitle"
                     >
                         <Input
                             placeholder={"输入关键字以搜索"}
@@ -64,7 +54,7 @@ export default function BlogSearch({onFinish}) {
                     <Form.Item
                         labelCol={{span: 4}}
                         label="作者"
-                        name="author"
+                        name="workAuthor"
                     >
                         <Input
                             placeholder={"输入作者以搜索"}

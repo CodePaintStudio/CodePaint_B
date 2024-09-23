@@ -1,9 +1,13 @@
-import {Button, Col, Form, Input, Row, Select} from 'antd';
-import {getBlogTypeListServer} from "../api/articelsCate.js";
+import {Button, Col, Form, Input, message, Row, Select} from 'antd';
 import {useEffect, useState} from "react";
 
+import {
+    searchBlogServer,
+    getBlogTypeListServer
+} from "../api/Blog.js";
+import {clearObj} from "../utils/tools.js";
 
-export default function BlogSearch({onFinish}) {
+export default function BlogSearch({setBlogList, setLoading}) {
 
     const [blogTypeList, setBlogTypeList] = useState([]);
 
@@ -16,10 +20,30 @@ export default function BlogSearch({onFinish}) {
                     label: item
                 }
             }))
+            typeList.unshift({
+                value: "all",
+                label: "全部"
+            });
             setBlogTypeList(typeList)
         }
 
     }
+
+    async function handleSearch(values) {
+        values = clearObj(values);
+        if (!Object.keys(values).length) return message.warning("请补全查询条件");
+        if(values.type && values.type === "all") delete values.type;
+        try {
+            setLoading(true);
+            const data = await searchBlogServer(values);
+            setBlogList(data.data);
+        } catch {
+            message.error("查询博客失败");
+        } finally {
+            setLoading(false);
+        }
+    }
+
 
     useEffect(() => {
         getBlogTypeList()
@@ -34,7 +58,7 @@ export default function BlogSearch({onFinish}) {
                 paddingBottom: 0
             }}
             labelAlign="right"
-            onFinish={onFinish}
+            onFinish={handleSearch}
             autoComplete="off"
         >
             <Row>
@@ -44,7 +68,7 @@ export default function BlogSearch({onFinish}) {
                     <Form.Item
                         labelCol={{span: 4}}
                         label="博客名"
-                        name="title"
+                        name="keyWord"
                     >
                         <Input
                             placeholder={"输入关键字以搜索"}
