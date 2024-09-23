@@ -1,21 +1,18 @@
-import dayjs from "dayjs";
 import {useState, useEffect} from "react";
-import {clearObj, sleep, toLocalDate} from "../utils/tools.js";
-import moment from "moment";
+import {sleep, toLocalDate} from "../utils/tools.js";
 
-import SearchForm from './BlogSearch.jsx';
-import BlogDetail from "./BlogDetail.jsx";
+import BlogSearch from './BlogSearch.jsx';
 import {message, Popconfirm, Space, Table} from "antd";
+import Details from "./Details.jsx";
 
 import {
     getArticleListServer,
     deleteArticleServer,
-    getBlogListByTypeServer
-} from "../api/articelsCate.js"
+} from "../api/Blog.js"
 
 export default function Blog() {
     const [blogList, setBlogList] = useState([]);
-    const [selectedBlogId, setSelectedBlogId] = useState(null); // 添加状态
+    const [selectedBlogId, setSelectedBlogId] = useState(null);
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false);
 
@@ -65,7 +62,7 @@ export default function Blog() {
                         style={{color: "#85bbb5"}}
                         onClick={(e) => {
                             e.preventDefault();
-                            showDrawer(record.articleId)
+                            showDrawer(record.articleId);
                         }}
                     >
                         详情
@@ -97,7 +94,7 @@ export default function Blog() {
 
     const showDrawer = (id) => {
         setOpen(true);
-        setSelectedBlogId(id)
+        setSelectedBlogId(id);
     };
     const onClose = () => {
         setOpen(false);
@@ -139,35 +136,6 @@ export default function Blog() {
         }
     }
 
-    async function getBlogListByType(type) {
-        try {
-            setLoading(true)
-            const data = await getBlogListByTypeServer(type)
-            const articleListWithKeys = data.data.map((item, index) => {
-                return {
-                    ...item,
-                    key: index,
-                    articleCreatedTime: moment(item.articleCreatedTime).local().format("YYYY-MM-DD HH:mm:ss"),
-                };
-            });
-            setBlogList(articleListWithKeys);
-        } catch {
-            message.warning("查询失败");
-        } finally {
-            setLoading(false)
-        }
-    }
-
-    function handleSubmit(values) {
-        values = clearObj(values);
-        if (values.publishTime) values.publishTime = dayjs(values.publishTime).format("YYYY-MM-DD");
-        if (!Object.keys(values).length) return message.warning("请补全查询条件");
-
-        /*TODO: 搜索提交*/
-        if (values.type) {
-            getBlogListByType(values.type)
-        }
-    }
 
     useEffect(() => {
         getArticleList();
@@ -176,8 +144,9 @@ export default function Blog() {
     return (
         <>
             <div>
-                <SearchForm
-                    onFinish={handleSubmit}
+                <BlogSearch
+                    setBlogList={setBlogList}
+                    setLoading={setLoading}
                 />
 
             </div>
@@ -196,7 +165,7 @@ export default function Blog() {
                     columns={columns}
                 />
             </div>
-            <BlogDetail onClose={onClose} open={open} selectedBlogId={selectedBlogId}/>
+            <Details id={selectedBlogId} type={"博客"} open={open} onClose={onClose}/>
         </>
     );
 }
