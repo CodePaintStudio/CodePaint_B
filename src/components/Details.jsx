@@ -105,10 +105,9 @@ export default function Details({id, type, open, onClose}) {
                         <Card
                             title="博客内容详情"
                             style={{
-                                marginTop: "5vh"
+                                marginTop: "5vh",
                             }}>
                             {typeof detailData.articleContent === 'string' && parseContent(detailData.articleContent)}
-
                         </Card>
                     </>
                 );
@@ -137,6 +136,41 @@ export default function Details({id, type, open, onClose}) {
                                 />
                             </Descriptions.Item>
                         </Descriptions>
+                        <Card
+                            title="作品展图"
+                            style={{
+                                marginTop: "5vh",
+                            }}>
+                            <div
+                                style={{
+                                    display: "flex",
+                                    flexWrap: "wrap",
+                                    justifyContent: "space-around",
+                                }}
+                            >
+                                {detailData.workTags?.map((tag, index) => {
+                                    return (
+                                        <div
+                                            key={index}
+                                            style={{
+                                                width: "45%",
+                                                padding: "2.5%",
+                                                backgroundColor: "rgba(225, 238, 237, 0.8)",
+                                                borderRadius: "5%",
+                                                marginBottom: "2.5%"
+                                            }}
+                                        >
+                                            <Image
+                                                key={index}
+                                                width={"100%"}
+                                                src={baseURL + "/" + tag}
+                                                fallback={"https://gw.alipayobjects.com/zos/antfincdn/aPkFc8Sj7n/method-draw-image.svg"}
+                                            />
+                                        </div>
+                                    )
+                                })}
+                            </div>
+                        </Card>
                     </>
                 );
                 break;
@@ -165,7 +199,7 @@ export default function Details({id, type, open, onClose}) {
                         <Card
                             title="活动内容详情"
                             style={{
-                                marginTop: "5vh"
+                                marginTop: "5vh",
                             }}>
                             {typeof detailData.content === 'string' && parseContent(detailData.content)}
                         </Card>
