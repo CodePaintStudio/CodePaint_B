@@ -31,7 +31,7 @@ export default function UiWork() {
         {
             title: "浏览量",
             dataIndex: "workLookCount",
-            sorter: (a, b) => a- b,
+            sorter: (a, b) => a - b,
             key: "workLookCount"
         },
         {
@@ -131,7 +131,7 @@ export default function UiWork() {
             message.error("删除失败");
         } finally {
             setLoading(false);
-            sleep(1000).then(()=>{
+            sleep(1000).then(() => {
                 getWorkList();
             })
         }
@@ -145,8 +145,8 @@ export default function UiWork() {
         <>
             <div>
                 <UiSearch
-                    setUiWorkList = {setUiWorkList}
-                    setLoading = {setLoading}
+                    setUiWorkList={setUiWorkList}
+                    setLoading={setLoading}
                 />
 
             </div>
@@ -165,7 +165,7 @@ export default function UiWork() {
                     columns={columns}
                 />
             </div>
-            <Details id={selectedWorkId} type={"作品"} open={open} onClose={onClose}/>
+            {selectedWorkId && <Details id={selectedWorkId} type={"作品"} open={open} onClose={onClose}/>}
         </>
     );
 }

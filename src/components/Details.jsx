@@ -84,6 +84,7 @@ export default function Details({id, type, open, onClose}) {
                 description = (
                     <>
                         <Descriptions
+                            bordered
                             title={detailData.articleTitle}
                             column={2}
                         >
@@ -117,17 +118,18 @@ export default function Details({id, type, open, onClose}) {
                 description = (
                     <>
                         <Descriptions
+                            bordered
                             title={detailData.workTitle}
                             column={2}
                         >
                             <Descriptions.Item label="ID">{detailData.workId}</Descriptions.Item>
                             <Descriptions.Item label="标题">{detailData.workTitle}</Descriptions.Item>
-                            <Descriptions.Item label="描述">{detailData.workDescription}</Descriptions.Item>
                             <Descriptions.Item label="作者">{detailData.workAuthor}</Descriptions.Item>
                             <Descriptions.Item
                                 label="创建时间">{toLocalDate(detailData.workCreateTime)}</Descriptions.Item>
                             <Descriptions.Item label="阅读量">{detailData.workLookCount}</Descriptions.Item>
                             <Descriptions.Item label="分类">{detailData.workType}</Descriptions.Item>
+                            <Descriptions.Item label="描述">{detailData.workDescription}</Descriptions.Item>
                             <Descriptions.Item label="封面">
                                 <Image
                                     width={200}
@@ -179,15 +181,19 @@ export default function Details({id, type, open, onClose}) {
                 description = (
                     <>
                         <Descriptions
+                            bordered
                             title={detailData.title}
                             column={2}
                         >
                             <Descriptions.Item label="ID">{detailData.id}</Descriptions.Item>
                             <Descriptions.Item label="标题">{detailData.title}</Descriptions.Item>
-                            <Descriptions.Item label="描述">{detailData.intro}</Descriptions.Item>
                             <Descriptions.Item label="作者">{detailData.creator}</Descriptions.Item>
                             <Descriptions.Item
-                                label="创建时间">{toLocalDate(detailData.createdAt)}</Descriptions.Item>
+                                label="创建时间"
+                            >
+                                {toLocalDate(detailData.createdAt)}
+                            </Descriptions.Item>
+                            <Descriptions.Item label="描述">{detailData.intro}</Descriptions.Item>
                             <Descriptions.Item label="封面">
                                 <Image
                                     width={200}

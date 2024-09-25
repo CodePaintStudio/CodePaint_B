@@ -165,7 +165,7 @@ export default function Blog() {
                     columns={columns}
                 />
             </div>
-            <Details id={selectedBlogId} type={"博客"} open={open} onClose={onClose}/>
+            {selectedBlogId && <Details id={selectedBlogId} type={"博客"} open={open} onClose={onClose}/>}
         </>
     );
 }

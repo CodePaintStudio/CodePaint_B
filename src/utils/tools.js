@@ -39,3 +39,24 @@ export function clearObj(values) {
 export function toLocalDate(date) {
     return new Date(date).toLocaleString();
 }
+
+/** 获取格式化的时间
+ * @returns {string}
+ */
+export function getTime() {
+    let now = new Date();
+    let year = now.getFullYear();
+    let month = now.getMonth() + 1;
+    let day = now.getDate();
+    let hour = now.getHours();
+    let minute = now.getMinutes();
+    let second = now.getSeconds();
+
+    month = month < 10 ? '0' + month : month;
+    day = day < 10 ? '0' + day : day;
+    hour = hour < 10 ? '0' + hour : hour;
+    minute = minute < 10 ? '0' + minute : minute;
+    second = second < 10 ? '0' + second : second;
+
+    return `${year}-${month}-${day}-${hour}:${minute}:${second}`;
+}

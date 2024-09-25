@@ -145,7 +145,7 @@ export default function Activities() {
                     columns={columns}
                 />
             </div>
-            <Details id={selectedActivityId} type={"活动"} open={open} onClose={onClose}/>
+            {selectedActivityId && <Details id={selectedActivityId} type={"活动"} open={open} onClose={onClose}/>}
         </>
     );
 }
