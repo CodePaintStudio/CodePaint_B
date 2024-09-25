@@ -1,60 +1,53 @@
 import {useEffect, useRef} from 'react';
-import * as echarts from 'echarts';
 
-const EChartsComponent = ({option}) => {
-    const chartRef = useRef(null);
+import {Card, Row, Col} from "antd";
 
-    useEffect(() => {
-        if (chartRef.current) {
-            const chartInstance = echarts.init(chartRef.current);
-            chartInstance.setOption(option);
-        }
-    }, [option]);
-
-    return <div ref={chartRef} style={{width: '100%', height: 400}}/>;
-};
+import Weather from "../components/Weather.jsx";
+import ThisTime from "../components/ThisTime.jsx";
+import RandomShow from "../components/RandomShow.jsx";
 
 const HomePage = () => {
-    const option = {
-        tooltip: {
-            trigger: 'axis',
-            formatter: function (params) {
-                let tooltipText = '';
-                params.forEach(function (param) {
-                    tooltipText += `${param.marker}${param.seriesName}: ${param.value}<br>`;
-                });
-                return tooltipText;
-            }
-        },
-        xAxis: {
-            type: 'category',
-            data: ['A', 'B', 'C', 'D', 'E']
-        },
-        yAxis: {
-            type: 'value',
-        },
-        series: [
-            {
-                name: '系列1',
-                data: [10, 22, 28, 23, 19],
-                type: 'line',
-                areaStyle: {}
-            },
-            {
-                name: '系列2',
-                data: [25, 14, 23, 35, 10],
-                type: 'line',
-                areaStyle: {
-                    color: '#ff0',
-                    opacity: 0.5
-                }
-            }
-        ]
-    };
 
     return (
-        <div>
-            <EChartsComponent option={option}/>
+        <div
+            style={{
+                padding: 20
+            }}
+        >
+            <Row
+                justify={"space-around"}
+            >
+                <Col
+                >
+                    <Card
+                        style={{
+                            width: 300,
+                            height: 150
+                        }}
+                    >
+                    <span style={{
+                        fontSize: "x-large",
+                        fontWeight: "bold",
+                        color: "rgb(107, 172, 163)",
+                    }}>
+                    当前时间：
+                    </span>
+                        <ThisTime/>
+                        <RandomShow/>
+                    </Card>
+                </Col>
+                <Col
+                >
+                    <Card
+                        style={{
+                            width: 300,
+                            height: 150
+                        }}
+                    >
+                        <Weather/>
+                    </Card>
+                </Col>
+            </Row>
         </div>
     );
 };

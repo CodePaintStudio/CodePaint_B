@@ -84,6 +84,7 @@ export default function Details({id, type, open, onClose}) {
                 description = (
                     <>
                         <Descriptions
+                            bordered
                             title={detailData.articleTitle}
                             column={2}
                         >
@@ -105,10 +106,9 @@ export default function Details({id, type, open, onClose}) {
                         <Card
                             title="博客内容详情"
                             style={{
-                                marginTop: "5vh"
+                                marginTop: "5vh",
                             }}>
                             {typeof detailData.articleContent === 'string' && parseContent(detailData.articleContent)}
-
                         </Card>
                     </>
                 );
@@ -118,17 +118,18 @@ export default function Details({id, type, open, onClose}) {
                 description = (
                     <>
                         <Descriptions
+                            bordered
                             title={detailData.workTitle}
                             column={2}
                         >
                             <Descriptions.Item label="ID">{detailData.workId}</Descriptions.Item>
                             <Descriptions.Item label="标题">{detailData.workTitle}</Descriptions.Item>
-                            <Descriptions.Item label="描述">{detailData.workDescription}</Descriptions.Item>
                             <Descriptions.Item label="作者">{detailData.workAuthor}</Descriptions.Item>
                             <Descriptions.Item
                                 label="创建时间">{toLocalDate(detailData.workCreateTime)}</Descriptions.Item>
                             <Descriptions.Item label="阅读量">{detailData.workLookCount}</Descriptions.Item>
                             <Descriptions.Item label="分类">{detailData.workType}</Descriptions.Item>
+                            <Descriptions.Item label="描述">{detailData.workDescription}</Descriptions.Item>
                             <Descriptions.Item label="封面">
                                 <Image
                                     width={200}
@@ -137,6 +138,41 @@ export default function Details({id, type, open, onClose}) {
                                 />
                             </Descriptions.Item>
                         </Descriptions>
+                        <Card
+                            title="作品展图"
+                            style={{
+                                marginTop: "5vh",
+                            }}>
+                            <div
+                                style={{
+                                    display: "flex",
+                                    flexWrap: "wrap",
+                                    justifyContent: "space-around",
+                                }}
+                            >
+                                {detailData.workTags?.map((tag, index) => {
+                                    return (
+                                        <div
+                                            key={index}
+                                            style={{
+                                                width: "45%",
+                                                padding: "2.5%",
+                                                backgroundColor: "rgba(225, 238, 237, 0.8)",
+                                                borderRadius: "5%",
+                                                marginBottom: "2.5%"
+                                            }}
+                                        >
+                                            <Image
+                                                key={index}
+                                                width={"100%"}
+                                                src={baseURL + "/" + tag}
+                                                fallback={"https://gw.alipayobjects.com/zos/antfincdn/aPkFc8Sj7n/method-draw-image.svg"}
+                                            />
+                                        </div>
+                                    )
+                                })}
+                            </div>
+                        </Card>
                     </>
                 );
                 break;
@@ -145,15 +181,19 @@ export default function Details({id, type, open, onClose}) {
                 description = (
                     <>
                         <Descriptions
+                            bordered
                             title={detailData.title}
                             column={2}
                         >
                             <Descriptions.Item label="ID">{detailData.id}</Descriptions.Item>
                             <Descriptions.Item label="标题">{detailData.title}</Descriptions.Item>
-                            <Descriptions.Item label="描述">{detailData.intro}</Descriptions.Item>
                             <Descriptions.Item label="作者">{detailData.creator}</Descriptions.Item>
                             <Descriptions.Item
-                                label="创建时间">{toLocalDate(detailData.createdAt)}</Descriptions.Item>
+                                label="创建时间"
+                            >
+                                {toLocalDate(detailData.createdAt)}
+                            </Descriptions.Item>
+                            <Descriptions.Item label="描述">{detailData.intro}</Descriptions.Item>
                             <Descriptions.Item label="封面">
                                 <Image
                                     width={200}
@@ -165,7 +205,7 @@ export default function Details({id, type, open, onClose}) {
                         <Card
                             title="活动内容详情"
                             style={{
-                                marginTop: "5vh"
+                                marginTop: "5vh",
                             }}>
                             {typeof detailData.content === 'string' && parseContent(detailData.content)}
                         </Card>
