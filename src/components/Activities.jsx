@@ -1,7 +1,7 @@
 import {useState, useEffect} from "react";
 import {sleep} from "../utils/tools.js";
 
-import {message, Popconfirm, Space, Table} from "antd";
+import {message, Popconfirm, Space, Table, Pagination} from "antd";
 
 import {
     getActivitiesServer,
@@ -14,6 +14,9 @@ export default function Activities() {
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false);
     const [selectedActivityId, setSelectedActivityId] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [pageSize, setPageSize] = useState(10);
+    const [total, setTotal] = useState(0);
 
     const columns = [
         {
@@ -90,10 +93,15 @@ export default function Activities() {
         setOpen(false);
     };
 
-    async function getActivitiesList() {
+    async function getActivitiesList(page = currentPage, pageSize = 10) {
         try {
-            setLoading(true)
-            const data = await getActivitiesServer();
+            setLoading(true);
+            const data = await getActivitiesServer({
+                page: page,
+                pageSize: pageSize
+            });
+            setTotal(data.total);
+            console.log(data.total)
             const activitiesListWithKeys = data.data.map((item, index) => {
                 return {
                     ...item,
@@ -124,6 +132,12 @@ export default function Activities() {
         }
     }
 
+    const handleTableChange = (page, pageSize) => {
+        setCurrentPage(page);
+        setPageSize(pageSize);
+        getActivitiesList(page, pageSize);
+    };
+
     useEffect(() => {
         getActivitiesList();
     }, []);
@@ -143,7 +157,23 @@ export default function Activities() {
                     }}
                     dataSource={activitiesList}
                     columns={columns}
+                    pagination={false}
                 />
+                <div
+                    style={{
+                        marginTop: 20,
+                        display: "flex",
+                        justifyContent: "end",
+                    }}
+                >
+                    <Pagination
+                        style={{marginTop: 16, textAlign: 'right'}}
+                        current={currentPage}
+                        pageSize={pageSize}
+                        total={total}
+                        onChange={handleTableChange}
+                    />
+                </div>
             </div>
             {selectedActivityId && <Details id={selectedActivityId} type={"活动"} open={open} onClose={onClose}/>}
         </>

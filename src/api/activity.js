@@ -4,10 +4,7 @@ import request from "../utils/request.js";
  * @param data 分页信息
  */
 export function getActivitiesServer(data) {
-    return request.get('/activity', {
-        page: data?.page,
-        pageSize: data?.pageSize,
-    });
+    return request.get(`/activity?page=${data.page}&pageSize=${data.pageSize}`);
 }
 
 /** 根据ID删除活动
