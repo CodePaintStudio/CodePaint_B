@@ -14,9 +14,10 @@ const HomePage = () => {
                 padding: 20
             }}
         >
-            <Row>
+            <Row
+                justify={"space-around"}
+            >
                 <Col
-                    span={12}
                 >
                     <Card
                         style={{
@@ -36,7 +37,6 @@ const HomePage = () => {
                     </Card>
                 </Col>
                 <Col
-                    span={12}
                 >
                     <Card
                         style={{
