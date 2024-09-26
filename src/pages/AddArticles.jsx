@@ -3,7 +3,7 @@ import { Tabs, Form, Input, Select, Upload, Button, message } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import '@toast-ui/editor/dist/toastui-editor.css';
 import RichEditor from "../components/RichEditor";
-
+import axios from 'axios';
 const { TabPane } = Tabs;
 const { Option } = Select;
 
@@ -17,7 +17,7 @@ const AddArticles = () => {
     form.resetFields();
   };
 
-  const onFinish = (values) => {
+  const onFinish = async (values) => {
     if (!richEditorRef.current.isSaved()) {
       message.warning("请先保存内容，保存后再提交");
       return;
@@ -30,8 +30,30 @@ const AddArticles = () => {
       return;
     }
 
-    console.log({ ...values, content });
-    message.success('提交成功！');
+    const payload = { ...values, content };
+
+    try {
+      let response;
+      if (activeTab === '1') {
+        // 博客接口
+        response = await axios.post('/api/blog', payload);
+      } else if (activeTab === '2') {
+        // UI作品接口
+        response = await axios.post('/api/ui-work', payload);
+      } else if (activeTab === '3') {
+        // 活动接口
+        response = await axios.post('/api/event', payload);
+      }
+
+      if (response.status === 200) {
+        message.success('提交成功！');
+        form.resetFields();
+        richEditorRef.current.clearContent(); 
+      }
+    } catch (error) {
+      message.error('提交失败，请重试！');
+      console.error('Error submitting form:', error);
+    }
   };
 
   const uploadProps = {

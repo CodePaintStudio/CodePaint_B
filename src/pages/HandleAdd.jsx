@@ -34,8 +34,6 @@ const HandleAdd = () => {
         publishTime: '2023-09-27',
         status: '未处理',
       },
-      // 可以添加更多数据以便测试滚动
-      // 添加更多以增加高度
     ];
     setWorks(mockData);
   }, []);
@@ -108,7 +106,7 @@ const HandleAdd = () => {
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Content style={{ padding: '24px', background: '#fff' }}>
-        <Title level={2}>作品管理</Title>
+        <Title level={2}>申请处理</Title>
         <div style={{ maxHeight: '800px', overflow: 'auto' }}> {/* 设置固定高度并使滚动条生效 */}
           <Table 
             columns={columns} 
