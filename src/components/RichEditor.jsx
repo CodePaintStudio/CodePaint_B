@@ -54,7 +54,7 @@ const RichEditor = forwardRef((props, ref) => {
             <Button onClick={addHandle}>保存</Button>
             <Editor
                 previewStyle="vertical"
-                height="600px"
+                height="450px"
                 initialEditType="wysiwyg"
                 usageStatistics={false}
                 ref={editorRef}

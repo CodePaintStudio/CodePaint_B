@@ -1,5 +1,14 @@
 import request from "../utils/request.js";
 
+/**
+ * 提交UI作品
+ * @param {Object} uiData 博客数据，包括标题、内容、类型等
+ * @returns {Promise<axios.AxiosResponse<any>>}
+ */
+export function submitUiServer(uiData) {
+    return request.post("/work", uiData)
+}
+
 /** 获取UI作品列表
  */
 export function getWorkListServer() {
