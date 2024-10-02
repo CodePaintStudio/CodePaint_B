@@ -1,10 +1,9 @@
-import {useEffect, useRef} from 'react';
-
 import {Card, Row, Col} from "antd";
 
 import Weather from "../components/Weather.jsx";
 import ThisTime from "../components/ThisTime.jsx";
 import RandomShow from "../components/RandomShow.jsx";
+import LookCount from "../components/LookCount.jsx";
 
 const HomePage = () => {
 
@@ -45,6 +44,20 @@ const HomePage = () => {
                         }}
                     >
                         <Weather/>
+                    </Card>
+                </Col>
+            </Row>
+            <Row
+                style={{
+                    marginTop: 20
+                }}
+                justify={"space-around"}>
+                <Col
+                    span={20}
+                >
+                    <Card
+                    >
+                        <LookCount/>
                     </Card>
                 </Col>
             </Row>
