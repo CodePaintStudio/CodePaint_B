@@ -1,6 +1,6 @@
 import {Drawer, Descriptions, Image, Card} from "antd";
 import {useEffect, useState} from "react";
-import parse, {domToReact} from 'html-react-parser';
+import parse from 'html-react-parser';
 
 import {
     getActivityByIdServer
@@ -35,22 +35,19 @@ export default function Details({id, type, open, onClose}) {
         setDetailData(data.data[0])
     }
 
-    // 自定义 img 组件
     const CustomImage = ({src, alt, ...props}) => (
         <img
             src={src}
             alt={alt}
-            style={{width: 'auto', height: '30vh'}} // 设置你想要的尺寸
+            style={{width: 'auto', height: '30vh'}}
             {...props}
         />
     );
 
-// 使用 parse 函数来转换 HTML 并应用自定义组件
     const parseContent = (content) => {
         const options = {
             replace: (domNode) => {
                 if (domNode.name === 'img') {
-                    // 直接返回自定义的 CustomImage 组件
                     return <CustomImage {...domNode.attribs} />;
                 }
             }
