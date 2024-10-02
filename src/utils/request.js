@@ -13,18 +13,18 @@ request.interceptors.response.use(
         if (res.data.code) {
             switch (res.data.code) {
                 case 500: {
-                    message.error(res.data.message)
+                    message.error(res.data.message);
                     return Promise.reject(res.data.data);
                 }
                 default : {
-                    return res.data
+                    return res.data;
                 }
             }
         }
         return res.data
     },
     (error) => {
-        console.log("响应拦截出错：", error);
+        message.error(error);
     }
 );
 
