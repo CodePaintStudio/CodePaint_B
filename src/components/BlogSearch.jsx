@@ -7,7 +7,7 @@ import {
 } from "../api/Blog.js";
 import {clearObj} from "../utils/tools.js";
 
-export default function BlogSearch({setBlogList, setLoading}) {
+export default function BlogSearch({setTotal, setPageInfo, setBlogList, setLoading}) {
 
     const [blogTypeList, setBlogTypeList] = useState([]);
 
@@ -32,11 +32,17 @@ export default function BlogSearch({setBlogList, setLoading}) {
     async function handleSearch(values) {
         values = clearObj(values);
         if (!Object.keys(values).length) return message.warning("请补全查询条件");
-        if(values.type && values.type === "all") delete values.type;
+        if (values.type && values.type === "all") delete values.type;
+        values = {
+            ...values,
+            page: 1,
+            pageSize: 100
+        }
         try {
             setLoading(true);
             const data = await searchBlogServer(values);
             setBlogList(data.data);
+            setTotal(data.total)
         } catch {
             message.error("查询博客失败");
         } finally {

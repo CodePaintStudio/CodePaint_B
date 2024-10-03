@@ -14,8 +14,10 @@ export default function Activities() {
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false);
     const [selectedActivityId, setSelectedActivityId] = useState(null);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [pageSize, setPageSize] = useState(10);
+    const [pageInfo, setPageInfo] = useState({
+        currentPage: 1,
+        pageSize: 10,
+    });
     const [total, setTotal] = useState(0);
 
     const columns = [
@@ -85,15 +87,17 @@ export default function Activities() {
         }
     ]
 
-    const showDrawer = (id) => {
-        setSelectedActivityId(id);
+    function showDrawer(id) {
         setOpen(true);
-    };
+        setSelectedActivityId(id);
+        console.log(id, selectedActivityId);
+    }
+
     const onClose = () => {
         setOpen(false);
     };
 
-    async function getActivitiesList(page = currentPage, pageSize = 10) {
+    async function getActivitiesList(page = pageInfo.currentPage, pageSize = 10) {
         try {
             setLoading(true);
             const data = await getActivitiesServer({
@@ -101,7 +105,6 @@ export default function Activities() {
                 pageSize: pageSize
             });
             setTotal(data.total);
-            console.log(data.total)
             const activitiesListWithKeys = data.data.map((item, index) => {
                 return {
                     ...item,
@@ -133,8 +136,10 @@ export default function Activities() {
     }
 
     const handleTableChange = (page, pageSize) => {
-        setCurrentPage(page);
-        setPageSize(pageSize);
+        setPageInfo({
+            currentPage: page,
+            pageSize: pageSize
+        })
         getActivitiesList(page, pageSize);
     };
 
@@ -168,8 +173,8 @@ export default function Activities() {
                 >
                     <Pagination
                         style={{marginTop: 16, textAlign: 'right'}}
-                        current={currentPage}
-                        pageSize={pageSize}
+                        current={pageInfo.currentPage}
+                        pageSize={pageInfo.pageSize}
                         total={total}
                         onChange={handleTableChange}
                     />

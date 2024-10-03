@@ -40,12 +40,6 @@ export default function UiWork() {
             key: "workType",
         },
         {
-            title: "发布时间",
-            dataIndex: "workCreateTime",
-            key: "workCreateTime",
-            sorter: (a, b) => a - b
-        },
-        {
             title: "ID",
             dataIndex: "workId",
             key: "workId",
@@ -106,10 +100,10 @@ export default function UiWork() {
             setLoading(true)
             const data = await getWorkListServer();
             const workListWithKeys = data.data.map((item, index) => {
+                console.log("item:", item)
                 return {
                     ...item,
                     key: index,
-                    workCreateTime: toLocalDate(item.workCreateTime),
                 };
             });
             setUiWorkList(workListWithKeys);
