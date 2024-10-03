@@ -32,19 +32,32 @@ export default function LookCount() {
         }
     }, [lookCountData, chartInstance]);
 
-    const minY = Math.min(...lookCountData.map(d => d[1]));
-    const maxY = Math.max(...lookCountData.map(d => d[1]));
 
     const updateChart = () => {
+        const minY = 0;
+        const maxY = Math.max(...lookCountData.map(d => d[1]));
         const minDate = new Date(Math.min(...lookCountData.map(d => d[0])));
         const maxDate = new Date(Math.max(...lookCountData.map(d => d[0])));
 
         chartInstance.setOption({
             title: {
-                text: '近七天的浏览量~'
+                text: '近日访问量~',
+                left: 'center',
+                textStyle: {
+                    color: 'rgb(107, 172, 163)',
+                    fontWeight: "900",
+                    fontSize: 24
+                }
             },
             tooltip: {
-                trigger: 'axis'
+                trigger: 'axis',
+                textStyle: {
+                    color: 'rgb(107, 172, 163)',
+                    fontStyle: 'normal',
+                    fontWeight: 'bold',
+                    fontFamily: 'sans-serif',
+                    fontSize: 14,
+                },
             },
             xAxis: {
                 type: 'time',
@@ -52,7 +65,7 @@ export default function LookCount() {
                 max: maxDate,
                 axisLabel: {
                     formatter: function (value) {
-                        return echarts.format.formatTime('MM-dd', value);
+                        return echarts.format.formatTime('yyyy-MM-dd', value);
                     }
                 },
                 splitLine: {
@@ -63,23 +76,32 @@ export default function LookCount() {
                 type: 'value',
                 min: minY,
                 max: maxY,
-                boundaryGap: [0, '100%'],
+                boundaryGap: false,
                 splitLine: {
                     show: false
                 }
             },
             series: [{
-                name: '浏览量',
+                name: '当日浏览量',
                 type: 'line',
-                showSymbol: false,
+                showSymbol: true,
                 hoverAnimation: true,
                 data: lookCountData,
-                areaStyle: {}
+                lineStyle: {
+                  color: 'rgb(107, 172, 163)',
+                },
+                itemStyle: {
+                  color: 'rgb(107, 172, 164)',
+                },
+                areaStyle: {
+                    color: 'rgba(107, 172, 163, 0.8)'
+                },
+                smooth: true,
             }]
         });
     };
 
     return (
-        <div id="lookCountChart" style={{width: '100%', height: 450}}></div>
+        <div id="lookCountChart" style={{width: '100%', height: 500}}></div>
     );
 }
