@@ -90,7 +90,6 @@ export default function Activities() {
     function showDrawer(id) {
         setOpen(true);
         setSelectedActivityId(id);
-        console.log(id, selectedActivityId);
     }
 
     const onClose = () => {
@@ -111,7 +110,6 @@ export default function Activities() {
                     key: index
                 };
             });
-            message.success("获取活动列表成功");
             setActivitiesList(activitiesListWithKeys);
         } catch {
             message.error("获取活动列表失败");
