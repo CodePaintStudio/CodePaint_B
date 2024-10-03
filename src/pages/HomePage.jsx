@@ -4,6 +4,7 @@ import Weather from "../components/Weather.jsx";
 import ThisTime from "../components/ThisTime.jsx";
 import RandomShow from "../components/RandomShow.jsx";
 import LookCount from "../components/LookCount.jsx";
+import CateCounts from "../components/CateCounts.jsx";
 
 const HomePage = () => {
 
@@ -17,27 +18,34 @@ const HomePage = () => {
                 justify={"space-around"}
             >
                 <Col
+                    span={8}
                 >
                     <Card
+                        hoverable
                         style={{
-                            width: 300,
+                            width: "90%",
                             height: 150
                         }}
                     >
-                    <span style={{
+                    <span
+                        style={{
                         fontSize: "x-large",
                         fontWeight: "bold",
                         color: "rgb(107, 172, 163)",
                     }}>
                     当前时间：
                     </span>
+                        <br/>
                         <ThisTime/>
                         <RandomShow/>
                     </Card>
                 </Col>
                 <Col
+                    hoverable
+                    span={16}
                 >
                     <Card
+                        hoverable
                         style={{
                             width: 300,
                             height: 150
@@ -46,16 +54,35 @@ const HomePage = () => {
                         <Weather/>
                     </Card>
                 </Col>
+
             </Row>
             <Row
                 style={{
-                    marginTop: 20
+                    marginTop: 40
                 }}
                 justify={"space-around"}>
                 <Col
-                    span={20}
+                    span={8}
                 >
                     <Card
+                        hoverable
+                        style={{
+                            width: "90%",
+                            height: 500
+                        }}
+                    >
+                        <CateCounts/>
+                    </Card>
+                </Col>
+                <Col
+                    span={16}
+                >
+                    <Card
+                        hoverable
+                        style={{
+                            width: "100%",
+                            height: 500
+                        }}
                     >
                         <LookCount/>
                     </Card>
