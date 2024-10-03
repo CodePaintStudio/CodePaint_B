@@ -136,7 +136,6 @@ const UserPage = () => {
         },
 
         beforeUpload(file) {
-            console.log(file.size)
             const isImage = file.type.startsWith('image/');
             const imgSize = isImage ? file.size : file.size;
             if (!isImage) {
@@ -159,7 +158,6 @@ const UserPage = () => {
                 .then(response => response.json())
                 .then(data => {
                     message.success('头像上传成功');
-                    console.log(data.data.data)
                     dispatch(updateStoreUserInfo({url: data.data.data}))
                 })
                 .catch(() => {

@@ -4,16 +4,30 @@ import {
     searchWorkServer
 } from "../api/uiWork.js"
 
-export default function UiSearch({setUiWorkList, setLoading}) {
+export default function UiSearch({setPageInfo, setTotal, setUiWorkList, setLoading}) {
 
     async function handleSubmit(values) {
         values = clearObj(values);
-        if (!Object.keys(values).length) return message.warning("请补全查询条件");
+        setPageInfo({
+            page: 1,
+            pageSize: 1000
+        })
+        values = {
+            ...values,
+            page: 1,
+            pageSize: 1000
+        }
         try {
             setLoading(true);
             const data = await searchWorkServer(values);
-            setUiWorkList(data.data);
-            message.success("查询UI作品成功");
+            const dataWithkeys = data.data.map((item, index) => {
+                return {
+                    ...item,
+                    key: index
+                }
+            })
+            setUiWorkList(dataWithkeys);
+            setTotal(data.total);
         } catch {
             message.warning("查询UI作品失败");
         } finally {

@@ -20,14 +20,12 @@ export default function Details({id, type, open, onClose}) {
 
     async function getActivityById(activityId) {
         const data = await getActivityByIdServer(activityId);
-        console.log(data)
-        setDetailData(data)
+        setDetailData(data.data)
     }
 
     async function getBlogById(blogId) {
         const data = await getBlogDetailByIdServer(blogId);
         setDetailData(data.data[0])
-        console.log(typeof detailData.articleContent)
     }
 
     async function getWorkById(activityId) {

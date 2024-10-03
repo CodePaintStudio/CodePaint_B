@@ -2,12 +2,12 @@ import {useState, useEffect} from "react";
 import {sleep, toLocalDate} from "../utils/tools.js";
 
 import BlogSearch from './BlogSearch.jsx';
-import {message, Popconfirm, Space, Table} from "antd";
+import {message, Popconfirm, Space, Table, Pagination} from "antd";
 import Details from "./Details.jsx";
 
 import {
-    getArticleListServer,
     deleteArticleServer,
+    searchBlogServer
 } from "../api/Blog.js"
 
 export default function Blog() {
@@ -15,6 +15,11 @@ export default function Blog() {
     const [selectedBlogId, setSelectedBlogId] = useState(null);
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false);
+    const [pageInfo, setPageInfo] = useState({
+        page: 1,
+        pageSize: 10,
+    });
+    const [total, setTotal] = useState(0);
 
     const columns = [
         {
@@ -100,10 +105,13 @@ export default function Blog() {
         setOpen(false);
     };
 
-    async function getArticleList() {
+    async function getArticleList(page = pageInfo.page, pageSize = pageInfo.pageSize) {
         try {
-            setLoading(true)
-            const data = await getArticleListServer();
+            setLoading(true);
+            const data = await searchBlogServer({
+                page: page,
+                pageSize: pageSize
+            });
             const articleListWithKeys = data.data.map((item, index) => {
                 return {
                     ...item,
@@ -111,14 +119,13 @@ export default function Blog() {
                     articleCreatedTime: toLocalDate(item.articleCreatedTime),
                 };
             });
-            message.success("获取博客列表成功");
             setBlogList(articleListWithKeys);
+            setTotal(data.total);
         } catch {
             message.error("获取博客列表失败");
         } finally {
             setLoading(false);
         }
-
     }
 
     async function deleteArticle(id) {
@@ -136,6 +143,14 @@ export default function Blog() {
         }
     }
 
+    const handleTableChange = (page, pageSize) => {
+        setPageInfo({
+            ...pageInfo,
+            page: page,
+            pageSize: pageSize
+        });
+        getArticleList(page, pageSize);
+    };
 
     useEffect(() => {
         getArticleList();
@@ -145,10 +160,11 @@ export default function Blog() {
         <>
             <div>
                 <BlogSearch
+                    setTotal={setTotal}
+                    setPageInfo={setPageInfo}
                     setBlogList={setBlogList}
                     setLoading={setLoading}
                 />
-
             </div>
             <div
                 style={{
@@ -159,11 +175,27 @@ export default function Blog() {
                     loading={loading}
                     scroll={{
                         x: 1500,
-                        y: 600,
+                        y: 500,
                     }}
                     dataSource={blogList}
                     columns={columns}
+                    pagination={false}
                 />
+                <div
+                    style={{
+                        marginTop: 20,
+                        display: "flex",
+                        justifyContent: "end",
+                    }}
+                >
+                    <Pagination
+                        style={{marginTop: 16, textAlign: 'right'}}
+                        current={pageInfo.page}
+                        pageSize={pageInfo.pageSize}
+                        total={total}
+                        onChange={handleTableChange}
+                    />
+                </div>
             </div>
             {selectedBlogId && <Details id={selectedBlogId} type={"博客"} open={open} onClose={onClose}/>}
         </>
