@@ -44,5 +44,5 @@ export function getBlogDetailByIdServer(id) {
  * @param data
  */
 export function searchBlogServer(data) {
-    return request.get(`/article/list/?keyWord=${data.keyWord || ''}&type=${data.type || ''}&author=${data.author || ''}`)
+    return request.get(`/article/list/?keyWord=${data.keyWord || ''}&type=${data.type || ''}&author=${data.author || ''}&page=${data.page || ''}&pageSize=${data.pageSize || ''}`)
 }

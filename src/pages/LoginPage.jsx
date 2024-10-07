@@ -23,7 +23,6 @@ const LoginPage = () => {
             const res = await loginServer(info)
             const name = res.data.username;
             const userInfo = await getInfoByNameServer({name: name});
-            console.log("userInfo", userInfo);
             dispatch(changeLoginStatus(true));
             dispatch(initUserInfo(userInfo));
             localStorage.setItem('userInfo', JSON.stringify(userInfo));

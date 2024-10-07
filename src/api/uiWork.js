@@ -33,5 +33,5 @@ export function getWorkDetailServer(id) {
  * @param data
  */
 export function searchWorkServer(data) {
-    return request.get(`/work/list?workTitle=${data.workTitle || ''}&workAuthor=${data.workAuthor || ''}`)
+    return request.get(`/work/list?workTitle=${data.workTitle || ''}&workAuthor=${data.workAuthor || ''}&page=${data.page || ''}&pageSize=${data.pageSize || ''}`)
 }
