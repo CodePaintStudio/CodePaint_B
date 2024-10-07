@@ -6,10 +6,13 @@ import request from "../utils/request.js";
  * @returns {Promise<axios.AxiosResponse<any>>}
  */
 export function submitActivityServer(data) {
+    console.log(data);
+    console.log("submitActivityServer被调用了");
+    
     return request.post('/activity', data);
 }
 
-/** 获取互动列表
+/** 获取活动列表
  * @param data 分页信息
  */
 export function getActivitiesServer(data) {
