@@ -1,6 +1,18 @@
 import request from "../utils/request.js";
 
-/** 获取互动列表
+
+/** 提交活动列表
+ * @param data 活动数据
+ * @returns {Promise<axios.AxiosResponse<any>>}
+ */
+export function submitActivityServer(data) {
+    console.log(data);
+    console.log("submitActivityServer被调用了");
+    
+    return request.post('/activity', data);
+}
+
+/** 获取活动列表
  * @param data 分页信息
  */
 export function getActivitiesServer(data) {

@@ -1,4 +1,4 @@
-import React, { useRef, useState, useImperativeHandle, forwardRef, useEffect } from "react";
+import React, { useRef, useState, useImperativeHandle, forwardRef } from "react";
 import { Editor } from '@toast-ui/react-editor';
 import { Button, message } from "antd";
 import codeSyntaxHighlight from '@toast-ui/editor-plugin-code-syntax-highlight';
@@ -11,27 +11,32 @@ import '@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin
 import { uploadFileServer } from "../api/uploadFile.js";
 
 const RichEditor = forwardRef((props, ref) => {
-    const [content, setContent] = useState("");
-    const [isSaved, setIsSaved] = useState(true);
+    const [content, setContent] = useState(null);
+    const [isSaved, setIsSaved] = useState(false);//用于显示当前内容是否保存
     const editorRef = useRef();
 
     useImperativeHandle(ref, () => ({
         getContent: () => content,
         isSaved: () => isSaved,
         editorRef: editorRef,
-        saveContent: addHandle
+        clearContent: () => {
+            if (editorRef.current) {
+                const editorInstance = editorRef.current.getInstance();
+                editorInstance.setHTML('');
+                setContent(null);
+                setIsSaved(false);
+            }
+        }
     }));
 
     function addHandle() {
         const rich_content = editorRef.current.getInstance().getHTML();
         if (rich_content === "<p><br></p>") {
-            message.warning("请输入内容！");
-            return false;
+            return message.warning("请输入内容！");
         }
         setContent(rich_content);
         setIsSaved(true);
         message.success("保存成功！");
-        return true;
     }
 
     const handleImageUpload = async (file, callback) => {
@@ -44,19 +49,12 @@ const RichEditor = forwardRef((props, ref) => {
         }
     };
 
-    useEffect(() => {
-        const instance = editorRef.current.getInstance();
-        instance.on('change', () => {
-            setIsSaved(false);
-        });
-    }, []);
-
     return (
         <>
             <Button onClick={addHandle}>保存</Button>
             <Editor
                 previewStyle="vertical"
-                height="600px"
+                height="450px"
                 initialEditType="wysiwyg"
                 usageStatistics={false}
                 ref={editorRef}
@@ -67,6 +65,7 @@ const RichEditor = forwardRef((props, ref) => {
                 hooks={{
                     addImageBlobHook: handleImageUpload,
                 }}
+                onChange={() => setIsSaved(false)}//当输入内容时，重置isSaved，提醒保存
             />
         </>
     );

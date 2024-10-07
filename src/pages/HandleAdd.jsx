@@ -1,53 +1,78 @@
-import React, { useState, useEffect } from 'react';
-import { Layout, Typography, Table, Space, Button, message } from 'antd';
-import { DeleteOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import React, { useState, useEffect } from 'react'
+import { Layout, Typography, Table, Space, Button, message, Modal } from 'antd'
+import { DeleteOutlined, InfoCircleOutlined } from '@ant-design/icons'
+import { baseURL } from "../utils/baseURL.js"
 
-const { Content } = Layout;
-const { Title } = Typography;
+const { Content } = Layout
+const { Title } = Typography
 
-const HandleAdd = () => {
-  const [works, setWorks] = useState([]);
+export default function HandleAdd() {
+  const [works, setWorks] = useState([])
+  const [loading, setLoading] = useState(false)
+  const [detailsModalVisible, setDetailsModalVisible] = useState(false)
+  const [currentDetails, setCurrentDetails] = useState(null)
+  const [pagination, setPagination] = useState({
+    current: 1,
+    pageSize: 10,
+    total: 0
+  })
+
+  const fetchWorks = async (page = 1, pageSize = 10) => {
+    setLoading(true)
+    try {
+      const response = await fetch(`${baseURL}/details?page=${page}&pageSize=${pageSize}`)
+      if (!response.ok) {
+        throw new Error('Network response was not ok')
+      }
+      const data = await response.json()
+      setWorks(data.items)
+      setPagination({
+        ...pagination,
+        current: page,
+        total: data.total
+      })
+      message.success('获取申请列表成功')
+    } catch (error) {
+      console.error('Error fetching works:', error)
+      message.error('获取作品列表失败')
+    } finally {
+      setLoading(false)
+    }
+  }
 
   useEffect(() => {
-    const mockData = [
-      {
-        key: '1',
-        name: '响应式布局设计',
-        author: '张三',
-        type: '前端文章',
-        publishTime: '2023-09-25',
-        status: '已处理',
-      },
-      {
-        key: '2',
-        name: '用户界面原型',
-        author: '李四',
-        type: 'UI作品',
-        publishTime: '2023-09-26',
-        status: '未处理',
-      },
-      {
-        key: '3',
-        name: '技术分享会',
-        author: '王五',
-        type: '活动',
-        publishTime: '2023-09-27',
-        status: '未处理',
-      },
-      // 可以添加更多数据以便测试滚动
-      // 添加更多以增加高度
-    ];
-    setWorks(mockData);
-  }, []);
+    fetchWorks()
+  }, [])
 
-  const handleDelete = (key) => {
-    setWorks(works.filter(work => work.key !== key));
-    message.success('作品已删除');
-  };
+  const handleDelete = async (id) => {
+    try {
+      const response = await fetch(`${baseURL}/details/delete?id=${id}`, { method: 'DELETE' })
+      if (!response.ok) throw new Error('Delete failed')
+      setWorks(works.filter(work => work.id !== id))
+      message.success('作品已成功删除')
+    } catch (error) {
+      console.error('Error deleting work:', error)
+      message.error('删除作品失败')
+    }
+  }
 
-  const handleDetails = (key) => {
-    message.info(`查看作品详情：${key}`);
-  };
+  const handleDetails = async (id) => {
+    try {
+      const response = await fetch(`${baseURL}/details/get?id=${id}`)
+      if (!response.ok) throw new Error('Failed to fetch details')
+      const details = await response.json()
+      setCurrentDetails(details)
+      setDetailsModalVisible(true)
+      message.success('成功获取作品详情')
+    } catch (error) {
+      console.error('Error fetching work details:', error)
+      message.error('获取作品详情失败')
+    }
+  }
+
+  const handleTableChange = (pagination) => {
+    fetchWorks(pagination.current, pagination.pageSize)
+  }
 
   const columns = [
     {
@@ -61,24 +86,9 @@ const HandleAdd = () => {
       key: 'author',
     },
     {
-      title: '类型',
-      dataIndex: 'type',
-      key: 'type',
-    },
-    {
       title: '发布时间',
       dataIndex: 'publishTime',
       key: 'publishTime',
-    },
-    {
-      title: '状态',
-      dataIndex: 'status',
-      key: 'status',
-      render: (status) => (
-        <span style={{ color: status === '已处理' ? 'green' : 'red' }}>
-          {status}
-        </span>
-      ),
     },
     {
       title: '操作',
@@ -88,7 +98,7 @@ const HandleAdd = () => {
           <Button 
             type="link" 
             icon={<InfoCircleOutlined />} 
-            onClick={() => handleDetails(record.key)}
+            onClick={() => handleDetails(record.id)}
           >
             详情
           </Button>
@@ -96,31 +106,46 @@ const HandleAdd = () => {
             type="link" 
             danger 
             icon={<DeleteOutlined />} 
-            onClick={() => handleDelete(record.key)}
+            onClick={() => handleDelete(record.id)}
           >
             删除
           </Button>
         </Space>
       ),
     },
-  ];
+  ]
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Content style={{ padding: '24px', background: '#fff' }}>
-        <Title level={2}>作品管理</Title>
-        <div style={{ maxHeight: '800px', overflow: 'auto' }}> {/* 设置固定高度并使滚动条生效 */}
+        <Title level={2}>申请处理</Title>
+        <div style={{ maxHeight: '800px', overflow: 'auto' }}>
           <Table 
             columns={columns} 
             dataSource={works} 
-            rowKey="key"
-            pagination={false}
+            rowKey="id"
+            pagination={pagination}
+            loading={loading}
+            onChange={handleTableChange}
             style={{ width: '100%' }} 
           />
         </div>
+        <Modal
+          title="作品详情"
+          visible={detailsModalVisible}
+          onCancel={() => setDetailsModalVisible(false)}
+          footer={null}
+        >
+          {currentDetails && (
+            <div>
+              <p><strong>名称:</strong> {currentDetails.name}</p>
+              <p><strong>作者:</strong> {currentDetails.author}</p>
+              <p><strong>发布时间:</strong> {currentDetails.publishTime}</p>
+              {/* 可以根据需要添加更多详细信息 */}
+            </div>
+          )}
+        </Modal>
       </Content>
     </Layout>
-  );
-};
-
-export default HandleAdd;
+  )
+}

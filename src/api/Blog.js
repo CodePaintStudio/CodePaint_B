@@ -1,5 +1,16 @@
 import request from "../utils/request.js";
 
+/**
+ * 提交博客
+ * @param {Object} blogData 
+ * @returns {Promise<axios.AxiosResponse<any>>}
+ */
+export function submitBlogServer(blogData) {
+    // console.log("submitBlogServer 函数被调用", blogData);
+    // console.log(blogData);
+    return request.post("/article", blogData)
+}
+
 /** 获取博客列表
  * @returns {Promise<axios.AxiosResponse<any>>}
  */
