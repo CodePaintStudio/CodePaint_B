@@ -1,5 +1,3 @@
-'use client'
-
 import React, { useState } from 'react'
 import { Form, Input, Upload, Button, message } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'

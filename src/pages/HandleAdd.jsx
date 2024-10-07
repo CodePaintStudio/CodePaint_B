@@ -31,7 +31,7 @@ export default function HandleAdd() {
         current: page,
         total: data.total
       })
-      message.success('获取作品列表成功')
+      message.success('获取申请列表成功')
     } catch (error) {
       console.error('Error fetching works:', error)
       message.error('获取作品列表失败')
