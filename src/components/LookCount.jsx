@@ -65,7 +65,7 @@ export default function LookCount() {
                 max: maxDate,
                 axisLabel: {
                     formatter: function (value) {
-                        return echarts.format.formatTime('yyyy-MM-dd', value);
+                        return echarts.format.formatTime('yy-MM-dd', value);
                     }
                 },
                 splitLine: {
@@ -88,10 +88,10 @@ export default function LookCount() {
                 hoverAnimation: true,
                 data: lookCountData,
                 lineStyle: {
-                  color: 'rgb(107, 172, 163)',
+                    color: 'rgb(107, 172, 163)',
                 },
                 itemStyle: {
-                  color: 'rgb(107, 172, 164)',
+                    color: 'rgb(107, 172, 164)',
                 },
                 areaStyle: {
                     color: 'rgba(107, 172, 163, 0.8)'
@@ -102,6 +102,6 @@ export default function LookCount() {
     };
 
     return (
-        <div id="lookCountChart" style={{width: '100%', height: 500}}></div>
+        <div id="lookCountChart" style={{width: '100%', height: 450}}></div>
     );
 }
