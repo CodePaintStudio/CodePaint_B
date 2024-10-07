@@ -48,7 +48,6 @@ const CateCounts = () => {
     useEffect(() => {
         getCounts();
 
-        // 初始化ECharts实例
         const chartInstance = echarts.init(chartRef.current);
 
         const initialOption = {
@@ -75,7 +74,7 @@ const CateCounts = () => {
                     name: "文章数量:",
                     type: "pie",
                     radius: "50%",
-                    data: [], // 初始为空，稍后通过API获取数据填充
+                    data: [],
                     emphasis: {
                         itemStyle: {
                             shadowBlur: 20,

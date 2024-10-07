@@ -97,6 +97,11 @@ export default function Details({id, type, open, onClose}) {
                                     fallback={"https://gw.alipayobjects.com/zos/antfincdn/aPkFc8Sj7n/method-draw-image.svg"}
                                 />
                             </Descriptions.Item>
+                            <Descriptions.Item
+                                lable="简介"
+                            >
+                                {detailData.articleInfo}
+                            </Descriptions.Item>
                         </Descriptions>
                         <Card
                             title="博客内容详情"
