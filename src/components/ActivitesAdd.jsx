@@ -35,7 +35,8 @@ export default function ActivitesAdd() {
 
     try {
       const response = await submitActivityServer(payload)
-      if (response && response.code === 200) {
+      // console.log(response.code);
+      if (response) {
         message.success('提交成功！')
         form.resetFields()
         richEditorRef.current.clearContent()
@@ -54,7 +55,8 @@ export default function ActivitesAdd() {
   const handleChange = async (info) => {
     const { file, fileList } = info
     setFileList(fileList)
-    
+
+
     if (file.status === 'done') {
       const fileUrl = file.response.data.data
       console.log(fileUrl);
