@@ -1,24 +1,21 @@
 import React, { useState, useRef } from 'react'
-import { Form, Input, Upload, Button, message } from 'antd'
+import { Form, Input, Upload, Button, message, Select } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
 import RichEditor from "../components/RichEditor"
 import { submitBlogServer } from '../api/Blog.js'
 import { baseURL } from "../utils/baseURL.js"
-
+const { Option } = Select;
 export default function BlogAdd() {
   const [form] = Form.useForm()
   const richEditorRef = useRef(null)
   const [coverImage, setCoverImage] = useState(null)
   const [fileList, setFileList] = useState([])
-
   const onFinish = async (values) => {
     if (!richEditorRef.current.isSaved()) {
       message.warning("请先保存内容，保存后再提交")
       return
     }
-
     const content = richEditorRef.current.getContent()
-
     if (!content || content === "<p><br></p>") {
       message.warning("请输入内容！")
       return
@@ -55,7 +52,6 @@ export default function BlogAdd() {
   const handleChange = async (info) => {
     const { file, fileList } = info
     setFileList(fileList)
-    
     if (file.status === 'done') {
       const fileUrl = file.response.data.data
       console.log(fileUrl);
@@ -73,14 +69,12 @@ export default function BlogAdd() {
       onError(new Error('只能上传图片文件!'))
       return
     }
-
     const isLt2M = file.size / 1024 / 1024 < 2
     if (!isLt2M) {
       message.error('图片必须小于2MB!')
       onError(new Error('图片必须小于2MB!'))
       return
     }
-
     const formData = new FormData()
     formData.append('file', file)
 
@@ -92,7 +86,6 @@ export default function BlogAdd() {
           authorization: 'authorization-text',
         },
       })
-
       if (!response.ok) {
         throw new Error('上传失败')
       }
@@ -162,7 +155,15 @@ export default function BlogAdd() {
           rules={[{ required: true, message: '请选择类型' }]}
           style={{ marginBottom: '16px' }}
         >
-          <Input />
+          <Select
+            placeholder="请选择类型"
+          >
+            <Option value="js">js</Option>
+            <Option value="vue">vue</Option>
+            <Option value="React">React</Option>
+            <Option value="Vue">Vue</Option>
+            <Option value="其他">其他</Option>
+          </Select>
         </Form.Item>
         <Form.Item label="内容" required>
           <RichEditor ref={richEditorRef} />
