@@ -148,11 +148,11 @@ export default function BlogAdd() {
                     <Col span={6}>
                         <Form.Item
                             name="articleTitle"
-                            label="标题"
-                            rules={[{required: true, message: '请输入标题'}]}
+                            label="博客标题"
+                            rules={[{required: true, message: '请输入博客标题'}]}
                             style={{flex: 1, marginRight: '10px'}}
                         >
-                            <Input placeholder="请输入标题"/>
+                            <Input placeholder="请输入博客标题"/>
                         </Form.Item>
                     </Col>
                     <Col
@@ -162,10 +162,10 @@ export default function BlogAdd() {
                         <Form.Item
                             name="articleAuthor"
                             label="作者"
-                            rules={[{required: true, message: '请输入作者'}]}
+                            rules={[{required: true, message: '请输入博客作者'}]}
                             style={{flex: 1}}
                         >
-                            <Input placeholder="请输入作者"/>
+                            <Input placeholder="请输入博客作者"/>
                         </Form.Item>
                     </Col>
                     <Col
@@ -175,11 +175,11 @@ export default function BlogAdd() {
                         <Form.Item
                             name="articleType"
                             label="类型"
-                            rules={[{required: true, message: '请选择类型'}]}
+                            rules={[{required: true, message: '请选择博客类型'}]}
                         >
                             <Select
                                 defaultValue={"全部"}
-                                placeholder={"请选择类型"}
+                                placeholder={"请选择博客类型"}
                                 dropdownRender={(menu) => (
                                     <>
                                         {menu}
@@ -211,18 +211,18 @@ export default function BlogAdd() {
                     <Col span={6}>
                         <Form.Item
                             name="articleInfo"
-                            label="文章简介"
-                            rules={[{required: true, message: '请输入文章简介'}]}
+                            label="博客简介"
+                            rules={[{required: true, message: '请输入博客简介'}]}
                         >
-                            <Input.TextArea rows={4} placeholder="请输入文章简介~"/>
+                            <Input.TextArea rows={4} placeholder="请输入博客简介~"/>
                         </Form.Item>
                     </Col>
                     <Col span={2} push={1}>
                         <Form.Item
                             name="coverImage"
-                            label="封面图片"
+                            label="博客封面"
                             style={{flex: 1}}
-                            rules={[{required: true, message: "请选择封面图片"}]}
+                            rules={[{required: true, message: "请选择博客封面"}]}
                         >
                             <Upload
                                 accept="image/*"
@@ -236,7 +236,7 @@ export default function BlogAdd() {
                                 {fileList.length === 0 && (
                                     <div>
                                         <PlusOutlined/>
-                                        <div style={{marginTop: 8}}>上传</div>
+                                        <div style={{marginTop: 8}}>上传图片</div>
                                     </div>
                                 )}
                             </Upload>
@@ -256,7 +256,7 @@ export default function BlogAdd() {
                                 fontSize: "x-large",
                                 fontWeight: "bold"
                             }}>
-                                提交文章
+                                提交博客
                             </Button>
                         </Form.Item>
                     </Col>

@@ -112,10 +112,10 @@ export default function ActivitesAdd() {
                         <Form.Item
                             name="title"
                             label="活动标题"
-                            rules={[{required: true, message: '请输入标题'}]}
+                            rules={[{required: true, message: '请输入活动标题'}]}
                             style={{flex: 1, marginRight: '10px'}}
                         >
-                            <Input placeholder={"请输入标题"}/>
+                            <Input placeholder={"请输入活动标题"}/>
                         </Form.Item>
                     </Col>
                     <Col span={6} push={1}>
@@ -125,7 +125,7 @@ export default function ActivitesAdd() {
                             rules={[{required: true, message: '请输入作者'}]}
                             style={{flex: 1}}
                         >
-                            <Input placeholder={"请输入作者【默认为活动编辑者】"}/>
+                            <Input placeholder={"请输入作者【默认为活动撰写者】"}/>
                         </Form.Item>
                     </Col>
                 </Row>
@@ -143,7 +143,7 @@ export default function ActivitesAdd() {
                     <Col span={4} push={1}>
                         <Form.Item
                             name="coverImage"
-                            label="活动封面图片"
+                            label="活动封面"
                             style={{flex: 1}}
                             rules={[{required: true, message: "请选择活动封面图片"}]}
                         >
@@ -186,7 +186,7 @@ export default function ActivitesAdd() {
                 </Row>
                 <Row>
                     <Col span={24}>
-                        <Form.Item label="内容" required>
+                        <Form.Item label="活动内容" required>
                             <RichEditor ref={richEditorRef}/>
                         </Form.Item>
                     </Col>
