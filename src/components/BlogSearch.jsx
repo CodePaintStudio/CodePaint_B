@@ -26,7 +26,6 @@ export default function BlogSearch({setTotal, setPageInfo, setBlogList, setLoadi
             });
             setBlogTypeList(typeList)
         }
-
     }
 
     async function handleSearch(values) {

@@ -20,16 +20,16 @@ export default function ArticlesCate() {
                         height: 50
                     }}
                     onChange={(value) => setTableType(value)}
-                    defaultValue={"activities"}
+                    defaultValue={"blog"}
                     options={[
-                        {value: 'activities', label: '活动'},
+                        {value: 'blog', label: '博客'},
                         {value: 'ui', label: 'UI作品'},
-                        {value: 'blog', label: '博客'}
+                        {value: 'activities', label: '活动'},
                     ]}
                 />
             </Row>
             {
-                tableType === 'activities' ? <Activities/> :
+                tableType === 'blog' ? <Activities/> :
                     tableType === "ui" ? <UiWork/> :
                         <Blog/>
             }

@@ -1,6 +1,6 @@
-import React, { useRef, useState, useImperativeHandle, forwardRef } from "react";
-import { Editor } from '@toast-ui/react-editor';
-import { Button, message } from "antd";
+import React, {useRef, useState, useImperativeHandle, forwardRef} from "react";
+import {Editor} from '@toast-ui/react-editor';
+import {Button, message} from "antd";
 import codeSyntaxHighlight from '@toast-ui/editor-plugin-code-syntax-highlight';
 import Prism from 'prismjs';
 
@@ -8,11 +8,12 @@ import '@toast-ui/editor/dist/toastui-editor.css';
 import 'prismjs/themes/prism.css';
 import '@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin-code-syntax-highlight.css';
 
-import { uploadFileServer } from "../api/uploadFile.js";
+import {uploadFileServer} from "../api/uploadFile.js";
+import {baseURL} from "../utils/baseURL.js";
 
 const RichEditor = forwardRef((props, ref) => {
     const [content, setContent] = useState(null);
-    const [isSaved, setIsSaved] = useState(false);//用于显示当前内容是否保存
+    const [isSaved, setIsSaved] = useState(false);
     const editorRef = useRef();
 
     useImperativeHandle(ref, () => ({
@@ -42,7 +43,7 @@ const RichEditor = forwardRef((props, ref) => {
     const handleImageUpload = async (file, callback) => {
         try {
             const result = await uploadFileServer(file)
-            callback(result.url, 'image');
+            callback(`${baseURL}/${result.data.data}`, 'image');
             URL.revokeObjectURL(file);
         } catch (error) {
             message.warning("上传失败")
@@ -51,22 +52,39 @@ const RichEditor = forwardRef((props, ref) => {
 
     return (
         <>
-            <Button onClick={addHandle}>保存</Button>
-            <Editor
-                previewStyle="vertical"
-                height="450px"
-                initialEditType="wysiwyg"
-                usageStatistics={false}
-                ref={editorRef}
-                language='zh-CN'
-                plugins={[
-                    [codeSyntaxHighlight, {highlighter: Prism}]
-                ]}
-                hooks={{
-                    addImageBlobHook: handleImageUpload,
+            <Button
+                type="primary"
+                onClick={addHandle}
+                style={{
+                    width: '20%',
+                    marginBottom: 10,
+                    fontWeight: "bold"
                 }}
-                onChange={() => setIsSaved(false)}//当输入内容时，重置isSaved，提醒保存
-            />
+            >保存内容</Button>
+            <div
+                style={{
+                    boxSizing: "border-box",
+                    width: "100%",
+                    padding: 10,
+                    paddingLeft: 0
+                }}
+            >
+                <Editor
+                    previewStyle="vertical"
+                    height="450px"
+                    initialEditType="markdown"
+                    usageStatistics={false}
+                    ref={editorRef}
+                    language='zh-CN'
+                    plugins={[
+                        [codeSyntaxHighlight, {highlighter: Prism}]
+                    ]}
+                    hooks={{
+                        addImageBlobHook: handleImageUpload,
+                    }}
+                    onChange={() => setIsSaved(false)}
+                />
+            </div>
         </>
     );
 });
