@@ -5,11 +5,13 @@ import {useSelector, useDispatch} from 'react-redux';
 import {initUserInfo, changeLoginStatus} from "./store/userSlice.js";
 import {getInfoByNameServer, loginServer} from "./api/user.js";
 import {message} from "antd";
+import {useNavigate} from "react-router-dom";
 
 export default function App() {
 
     const isLogin = useSelector(state => state.user.isLogin);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     useEffect(() => {
         const localInfo = JSON.parse(localStorage.getItem('userInfo'));
@@ -24,6 +26,7 @@ export default function App() {
                     const userinfo = await getInfoByNameServer(res.username);
                     dispatch(changeLoginStatus(true));
                     dispatch(initUserInfo(userinfo));
+                    navigate("/home");
                 } catch {
                     message.error("获取用户信息失败")
                 }

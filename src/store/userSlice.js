@@ -25,6 +25,7 @@ export const userSlice = createSlice({
         clearUserInfo: (state) => {
             state.userInfo = [];
             localStorage.removeItem("userInfo");
+
         }
     }
 })
