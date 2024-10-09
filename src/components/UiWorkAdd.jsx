@@ -92,17 +92,17 @@ export default function UiWorkAdd() {
     }
 
     return (
-        <div style={{height: "calc(100vh - 48px)", overflow: "auto", padding: '20px'}}>
+        <div style={{overflow: "auto"}}>
             <Form form={form} onFinish={onFinish} layout="vertical">
                 <Row>
                     <Col span={6}>
                         <Form.Item
                             name="workTitle"
-                            label="标题"
-                            rules={[{required: true, message: '请输入标题'}]}
+                            label="作品名称"
+                            rules={[{required: true, message: '请输入作品名称'}]}
                             style={{flex: 1, marginRight: '10px'}}
                         >
-                            <Input placeholder="请输入标题"/>
+                            <Input placeholder="请输入作品名称"/>
                         </Form.Item>
                     </Col>
 
@@ -119,7 +119,7 @@ export default function UiWorkAdd() {
                     <Col span={6} push={2}>
                         <Form.Item
                             name="workType"
-                            label="类型"
+                            label="作品类型"
                             rules={[{required: true, message: '请输入作品类型'}]}
                             style={{marginBottom: '16px'}}
                         >
@@ -142,9 +142,9 @@ export default function UiWorkAdd() {
                     <Col span={6} push={1}>
                         <Form.Item
                             name="coverImage"
-                            label="封面图片"
+                            label="作品封面"
                             style={{flex: 1}}
-                            rules={[{required: true, message: "请选择封面图片"}]}
+                            rules={[{required: true, message: "请选择作品封面图片"}]}
                         >
                             <Upload
                                 accept="image/*"

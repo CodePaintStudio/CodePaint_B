@@ -41,47 +41,30 @@ export default function LookCount() {
 
         chartInstance.setOption({
             title: {
-                text: '近日访问量~',
-                left: 'center',
-                textStyle: {
-                    color: 'rgb(107, 172, 163)',
-                    fontWeight: "900",
-                    fontSize: 24
+                text: '近日访问量~', left: 'center', textStyle: {
+                    color: 'rgb(107, 172, 163)', fontWeight: "900", fontSize: 24
                 }
-            },
-            tooltip: {
-                trigger: 'axis',
-                textStyle: {
+            }, tooltip: {
+                trigger: 'axis', textStyle: {
                     color: 'rgb(107, 172, 163)',
                     fontStyle: 'normal',
                     fontWeight: 'bold',
                     fontFamily: 'sans-serif',
                     fontSize: 14,
                 },
-            },
-            xAxis: {
-                type: 'time',
-                min: minDate,
-                max: maxDate,
-                axisLabel: {
+            }, xAxis: {
+                type: 'time', min: minDate, max: maxDate, axisLabel: {
                     formatter: function (value) {
                         return echarts.format.formatTime('yy-MM-dd', value);
                     }
-                },
-                splitLine: {
+                }, splitLine: {
                     show: false
                 }
-            },
-            yAxis: {
-                type: 'value',
-                min: minY,
-                max: maxY,
-                boundaryGap: false,
-                splitLine: {
+            }, yAxis: {
+                type: 'value', min: minY > 5 ? minY - 3 : 0, max: maxY + 5, boundaryGap: false, splitLine: {
                     show: false
                 }
-            },
-            series: [{
+            }, series: [{
                 name: '当日浏览量',
                 type: 'line',
                 showSymbol: true,
@@ -101,7 +84,5 @@ export default function LookCount() {
         });
     };
 
-    return (
-        <div id="lookCountChart" style={{width: '100%', height: 450}}></div>
-    );
+    return (<div id="lookCountChart" style={{width: '100%', height: 450}}></div>);
 }
