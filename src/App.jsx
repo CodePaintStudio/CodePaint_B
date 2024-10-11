@@ -14,6 +14,7 @@ export default function App() {
 
     useEffect(() => {
         const localInfo = JSON.parse(localStorage.getItem('userInfo'));
+        navigate('/login')
 
         const checkLoginStatus = async () => {
             if (localInfo) {

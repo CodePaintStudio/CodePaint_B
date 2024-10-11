@@ -219,7 +219,7 @@ const UserPage = () => {
                             onConfirm={() => {
                                 message.success('退出登陆成功');
                                 dispatch(clearUserInfo());
-                                navigate('/login')
+                                location.reload();
                             }}
                             onCancel={() => {
                                 message.info('已取消退出登录');
