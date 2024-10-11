@@ -1,13 +1,11 @@
-import dayjs from "dayjs";
 import {useState, useEffect} from "react";
-import {clearObj, sleep, toLocalDate} from "../utils/tools.js";
+import {sleep} from "../utils/tools.js";
 
 import UiSearch from './UiSearch.jsx';
 import Details from "./Details.jsx";
 import {message, Popconfirm, Space, Table, Pagination} from "antd";
 
 import {
-    getWorkListServer,
     searchWorkServer,
     deleteWorkServer
 } from "../api/uiWork.js"
@@ -37,7 +35,6 @@ export default function UiWork() {
         {
             title: "浏览量",
             dataIndex: "workLookCount",
-            sorter: (a, b) => a - b,
             key: "workLookCount"
         },
         {

@@ -40,14 +40,12 @@ export default function Blog() {
         {
             title: "浏览量",
             dataIndex: "articleLookCount",
-            sorter: (a, b) => a - b,
             key: "articleLookCount"
         },
         {
             title: "发布时间",
             dataIndex: "articleCreatedTime",
-            key: "articleCreatedTime",
-            sorter: (a, b) => a - b
+            key: "articleCreatedTime"
         },
         {
             title: "ID",

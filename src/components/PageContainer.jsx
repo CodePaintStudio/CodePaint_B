@@ -1,5 +1,5 @@
-import {useNavigate} from 'react-router-dom';
-import RouteConfig from "../router/index.jsx"
+import {useNavigate, Routes, Route} from 'react-router-dom';
+import RouteConfig from "../router/index.jsx";
 import {
     CheckCircleFilled,
     SmileFilled,
@@ -8,7 +8,8 @@ import {
     BookFilled
 } from '@ant-design/icons';
 import {Layout, Menu, theme} from 'antd';
-import * as style from "../styles/PageContainer.module.css"
+import * as style from "../styles/PageContainer.module.css";
+import {useEffect} from "react";
 
 const {Sider, Content} = Layout;
 
@@ -40,6 +41,10 @@ export default function PageContainer() {
         }
     };
 
+    useEffect(() => {
+        navigate('/home');
+    }, []);
+
     return (
         <Layout style={{maxHeight: '100vh'}}>
             <Sider trigger={null} style={{backgroundColor: colorBgContainer}} width="13vw">
@@ -54,7 +59,8 @@ export default function PageContainer() {
                             style={{
                                 display: "inline",
                                 fontSize: 28
-                            }}>
+                            }}
+                        >
                             CODEPAINT
                         </h1>
                         <br/>
@@ -78,7 +84,6 @@ export default function PageContainer() {
                             icon: <BookFilled style={{color: "rgb(107, 172, 163)"}}/>,
                             label: '文章管理',
                         },
-
                         {
                             key: "3",
                             icon: <EditFilled style={{color: "rgb(107, 172, 163)"}}/>,
@@ -105,7 +110,9 @@ export default function PageContainer() {
                     borderRadius: borderRadiusLG,
                 }}
             >
-                <RouteConfig/>
+                <Routes>
+                    <Route path="/*" element={<RouteConfig/>}/>
+                </Routes>
             </Content>
         </Layout>
     );

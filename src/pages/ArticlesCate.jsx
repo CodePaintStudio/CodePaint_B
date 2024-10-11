@@ -6,7 +6,7 @@ import Activities from "../components/Activities.jsx";
 import UiWork from "../components/UiWork.jsx";
 
 export default function ArticlesCate() {
-    const [tableType, setTableType] = useState('activities');
+    const [tableType, setTableType] = useState('blog');
 
     return (
         <>
@@ -29,9 +29,9 @@ export default function ArticlesCate() {
                 />
             </Row>
             {
-                tableType === 'blog' ? <Activities/> :
+                tableType === 'blog' ? <Blog/> :
                     tableType === "ui" ? <UiWork/> :
-                        <Blog/>
+                        <Activities/>
             }
         </>
     );

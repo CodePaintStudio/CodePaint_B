@@ -20,6 +20,8 @@ export default function ThisTime() {
                 color: "rgb(107, 172, 163)",
                 display: "inline-block",
             }}
-        >{time}</div>
+        >
+            {time}
+        </div>
     );
 }

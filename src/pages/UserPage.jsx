@@ -7,6 +7,7 @@ import PersonalInfoItem from "../components/UserInfoItem.jsx";
 import {maskMiddle, sleep} from "../utils/tools";
 import {changePasswordServer} from '../api/user.js'
 import {baseURL} from "../utils/baseURL.js";
+import {useNavigate} from "react-router-dom";
 
 const UserPage = () => {
     const [open, setOpen] = useState(false);
@@ -18,6 +19,7 @@ const UserPage = () => {
 
     const userInfo = useSelector(state => state.user.userInfo);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     async function handleOk() {
         const data = await changePasswordServer({
