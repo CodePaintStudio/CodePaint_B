@@ -10,13 +10,14 @@ import LoginPage from "../pages/LoginPage.jsx";
 export default function RouteConfig() {
     return (
         <Routes>
-            <Route path="/login" element={<LoginPage/>}></Route>
-            <Route path="/home" element={<HomePage/>}></Route>
-            <Route path="/articles" element={<ArticlesCate/>}></Route>
-            <Route path="/addarticle" element={<AddArticles/>}></Route>
-            <Route path="/handleadd" element={<HandleAdd/>}></Route>
-            <Route path="/user" element={<UserPage/>}></Route>
-            <Route path="/" element={<HomePage/>}></Route>
+            <Route path="/login" element={<LoginPage/>}/>
+            <Route path="/">
+                <Route path="home" element={<HomePage/>}/>
+                <Route path="articles" element={<ArticlesCate/>}/>
+                <Route path="addarticle" element={<AddArticles/>}/>
+                <Route path="handleadd" element={<HandleAdd/>}/>
+                <Route path="user" element={<UserPage/>}/>
+            </Route>
         </Routes>
-    )
+    );
 }

@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react'
 import {Layout, Table, Space, Button, message, Modal, Input} from 'antd'
 import {DeleteOutlined, InfoCircleOutlined} from '@ant-design/icons'
 import {baseURL} from "../utils/baseURL.js"
+import {toLocalDate} from "../utils/tools.js";
 
 const {Content} = Layout
 
@@ -12,7 +13,7 @@ export default function HandleAdd() {
     const [currentDetails, setCurrentDetails] = useState(null)
     const [pagination, setPagination] = useState({
         current: 1,
-        pageSize: 10,
+        pageSize: 100,
         total: 0
     })
 
@@ -25,6 +26,13 @@ export default function HandleAdd() {
             }
             const data = await response.json()
             const detailsData = data.data;
+            detailsData.data = detailsData.data.map((item, index) => {
+                return {
+                    ...item,
+                    key: index,
+                    updateTime: toLocalDate(item.updateTime),
+                };
+            })
             setFeedbacks(detailsData.data)
 
             setPagination({
@@ -32,9 +40,7 @@ export default function HandleAdd() {
                 current: page,
                 total: data.total
             })
-            message.success('获取反馈列表成功')
         } catch (error) {
-            console.error('Error fetching details:', error)
             message.error('获取反馈列表失败')
         } finally {
             setLoading(false)
@@ -58,7 +64,6 @@ export default function HandleAdd() {
                     setFeedbacks(feedbacks.filter(feedback => feedback.id !== id))
                     message.success('反馈已成功删除')
                 } catch (error) {
-                    console.error('Error deleting feedback:', error)
                     message.error('删除反馈失败')
                 }
             }
@@ -72,9 +77,7 @@ export default function HandleAdd() {
             const details = await response.json()
             setCurrentDetails(details.data)
             setDetailsModalVisible(true)
-            message.success('成功获取反馈详情')
         } catch (error) {
-            console.error('Error fetching feedback details:', error)
             message.error('获取反馈详情失败')
         }
     }
@@ -93,6 +96,11 @@ export default function HandleAdd() {
             title: '反馈类型',
             dataIndex: 'type',
             key: 'type',
+        },
+        {
+            title: "反馈时间",
+            dataIndex: 'updateTime',
+            key: 'updateTime',
         },
         {
             title: '操作',
@@ -121,8 +129,8 @@ export default function HandleAdd() {
 
     return (
         <Layout style={{minHeight: '100vh'}}>
-            <Content style={{padding: '24px', background: '#fff'}}>
-                <div style={{maxHeight: '800px', overflow: 'auto'}}>
+            <Content style={{padding: 20, background: '#fff'}}>
+                <div style={{maxHeight: 800, overflow: 'auto'}}>
                     <Table
                         columns={columns}
                         dataSource={feedbacks}

@@ -8,7 +8,6 @@ import {message} from "antd";
 import {useNavigate} from "react-router-dom";
 
 export default function App() {
-
     const isLogin = useSelector(state => state.user.isLogin);
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -16,34 +15,30 @@ export default function App() {
     useEffect(() => {
         const localInfo = JSON.parse(localStorage.getItem('userInfo'));
 
-        async function checkLoginStatusFn() {
-            try {
-                const res = await loginServer({
-                    username: localInfo.username,
-                    password: localInfo.password,
-                });
+        const checkLoginStatus = async () => {
+            if (localInfo) {
                 try {
+                    const res = await loginServer({
+                        username: localInfo.username,
+                        password: localInfo.password,
+                    });
                     const userinfo = await getInfoByNameServer(res.username);
                     dispatch(changeLoginStatus(true));
                     dispatch(initUserInfo(userinfo));
                     navigate("/home");
-                } catch {
-                    message.error("获取用户信息失败")
+                } catch (error) {
+                    message.error(error.response?.data?.message || "用户登录失败");
                 }
-            } catch {
-                message.error("用户登录失败")
             }
-        }
+        };
 
-        if (localInfo) {
-            checkLoginStatusFn()
-        }
+        checkLoginStatus();
 
-    }, [])
+    }, []);
 
     return (
         <>
             {isLogin ? <PageContainer/> : <LoginPage/>}
         </>
-    )
+    );
 }
